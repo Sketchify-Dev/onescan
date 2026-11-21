@@ -9,9 +9,16 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@qorechain/evm": "^0.14.0",
+    "@qorechain/pqc": "^0.2.3",
+    "@qorechain/qoresign": "^0.2.0",
+    "@qorechain/qorex-types": "^0.1.0",
+    "@qorechain/sdk": "^0.14.0",
     "next": "16.4.6",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-qr-code": "^2.2.0",
+    "viem": "^2.58.3"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
@@ -20,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "solc": "^0.8.39",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
   }
