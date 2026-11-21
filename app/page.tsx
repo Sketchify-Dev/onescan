@@ -7,7 +7,7 @@ ScanMark,
 ShieldMark,
 TicketMark,
 } from "@/components/icons";
-import { ConnectButton } from "@/components/ConnectButton";
+import { HeroField } from "@/components/HeroField";
 import { EXPLORER, deployments } from "@/lib/chain";
 
 type Health = {
@@ -29,7 +29,7 @@ return { ok: false, error: "unreachable" };
 }
 }
 
-const CONTRACT_FALLBACK = "0xd4A62117c4E5726f5a94A25Eb191261510c20Dac";
+const CONTRACT_FALLBACK = "0xd4A62117c4E5726f5A94A25Eb191261510c20Dac";
 
 function shortHash(hash: string): string {
 return `${hash.slice(0, 10)}...${hash.slice(-6)}`;
@@ -124,52 +124,60 @@ const health = await getHealth();
 const contract = deployments().address ?? CONTRACT_FALLBACK;
 
 return (
-<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-16 px-4 py-12 sm:gap-20 sm:px-6 sm:py-16">
-<section className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
-<div className="pq-entrance flex flex-col gap-6">
-<p className="inline-flex w-fit items-center gap-2 rounded-full border border-line px-4 py-1.5 text-sm font-medium text-ink-muted">
+<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-16 px-4 py-8 sm:gap-20 sm:px-6 sm:py-12">
+<section className="overflow-hidden rounded-3xl bg-[#0B0C12] text-[#F4F3ED]">
+<div className="relative">
+<HeroField className="absolute inset-0 h-full w-full" />
+<div className="relative grid gap-10 p-6 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 lg:p-12">
+<div className="pq-entrance flex flex-col items-start gap-6">
+<p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-white/70">
 <TicketMark size={16} />
 QoreChain Developer Fest, Quantum Pass
 </p>
 <h1 className="font-display max-w-2xl text-balance text-[clamp(2.75rem,6vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.02em]">
 Forwarded QR codes kill small events.{" "}
-<em className="font-editorial font-normal">OneScan holds the door.</em>
+<em className="font-editorial font-normal text-[#C7C9FF]">
+OneScan holds the door.
+</em>
 </h1>
-<p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-ink-muted">
-Each ticket is soulbound to one wallet on QoreChain testnet Diana.
-The organizer or an approved scanner checks it in once, onchain. A
-leaked classical key cannot forge entry or move the ticket.
+<p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-white/70">
+Each ticket is soulbound to one wallet on QoreChain testnet
+Diana. The organizer or an approved scanner checks it in once,
+onchain. A leaked classical key cannot forge entry or move the
+ticket.
 </p>
 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
 <Link
 href="/events/new"
-className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95"
+className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#4F46E5] px-6 font-medium text-white transition-transform enabled:active:scale-95"
 >
 <TicketMark />
 Create an event
 </Link>
 <Link
 href="/scan"
-className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95"
+className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-white/25 px-6 font-medium transition-transform enabled:active:scale-95"
 >
 <ScanMark />
 Open scanner
 </Link>
-<ConnectButton />
 </div>
 <div
-className="flex items-center gap-2 text-sm"
+className="flex items-center gap-2 text-sm text-white/70"
 role="status"
 aria-live="polite"
 >
 <span
 aria-hidden="true"
-className={`inline-block h-2.5 w-2.5 rounded-full ${health.ok ? "bg-success" : "bg-danger"}`}
+className={`inline-block h-2.5 w-2.5 rounded-full ${health.ok ? "bg-[#4ADE80]" : "bg-[#F87171]"}`}
 />
 {health.ok ? (
 <span>
 Testnet Diana live, latest block{" "}
-<span className="font-mono tabular-nums">{health.latestBlock}</span>.
+<span className="font-mono tabular-nums text-white">
+{health.latestBlock}
+</span>
+.
 </span>
 ) : (
 <span>Testnet RPC unreachable right now.</span>
@@ -179,42 +187,41 @@ Testnet Diana live, latest block{" "}
 
 <aside
 aria-label="Sample soulbound ticket"
-className="pq-entrance pq-entrance-1 overflow-hidden rounded-3xl border border-line"
+className="pq-entrance pq-entrance-1 flex flex-col gap-4 self-center rounded-3xl border border-white/12 bg-white/[0.04] p-6 sm:p-8"
 >
-<div className="flex items-center justify-between gap-3 bg-ink/[0.04] px-6 py-4">
-<p className="text-sm font-semibold tracking-[0.08em] uppercase">
+<div className="flex items-center justify-between gap-3">
+<p className="text-sm font-semibold tracking-[0.08em] text-white/60 uppercase">
 Admit one
 </p>
-<span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-[#4ADE80]/15 px-3 py-1 text-xs font-semibold text-[#86EFAC]">
 <ShieldMark size={14} />
 Soulbound
 </span>
 </div>
-<div className="flex flex-col gap-4 px-6 py-6">
 <div className="flex items-start justify-between gap-3">
 <div className="flex flex-col gap-1">
 <p className="font-display text-2xl font-bold tracking-[-0.01em]">
 Campus Show
 </p>
-<p className="text-sm text-ink-muted">Nov 30, testnet Diana</p>
+<p className="text-sm text-white/60">Nov 30, testnet Diana</p>
 </div>
-<TicketMark size={32} className="text-accent" />
+<TicketMark size={32} className="text-[#A5B4FC]" />
 </div>
-<dl className="flex flex-col gap-3 border-t border-dashed border-line pt-4 text-sm">
+<dl className="flex flex-col gap-3 border-t border-dashed border-white/15 pt-4 text-sm">
 <div className="flex items-center justify-between gap-3">
-<dt className="text-ink-muted">Ticket</dt>
+<dt className="text-white/60">Ticket</dt>
 <dd className="font-mono tabular-nums">#3, 1 per wallet</dd>
 </div>
 <div className="flex items-center justify-between gap-3">
-<dt className="text-ink-muted">Status</dt>
-<dd className="font-medium text-success">Unused, scannable</dd>
+<dt className="text-white/60">Status</dt>
+<dd className="font-medium text-[#86EFAC]">Unused, scannable</dd>
 </div>
 <div className="flex items-center justify-between gap-3">
-<dt className="text-ink-muted">Contract</dt>
+<dt className="text-white/60">Contract</dt>
 <dd className="font-mono tabular-nums">
 <a
 href={`${EXPLORER}/address/${contract}`}
-className="underline underline-offset-4"
+className="text-[#A5B4FC] underline underline-offset-4"
 >
 {contract.slice(0, 6)}...{contract.slice(-4)}
 </a>
@@ -223,12 +230,13 @@ className="underline underline-offset-4"
 </dl>
 <Link
 href="/events/7"
-className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95"
+className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/20 px-6 font-medium transition-transform enabled:active:scale-95"
 >
 View the live event
 </Link>
-</div>
 </aside>
+</div>
+</div>
 </section>
 
 <section className="pq-entrance pq-entrance-2 flex flex-col gap-5">
