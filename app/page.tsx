@@ -30,16 +30,16 @@ async function getHealth(): Promise<Health> {
 
 const DEMO_EVENTS = [
   {
-    id: "campus-show",
+    id: "7",
     name: "Campus Show Nov 30",
     detail: "Free entry, 200 seats, 1 ticket per wallet.",
     price: "Free",
   },
   {
-    id: "builders-meetup",
+    id: "8",
     name: "Builders Meetup Dec 5",
     detail: "Paid entry in test QOR, proves payment path.",
-    price: "Paid",
+    price: "1 QOR",
   },
 ];
 

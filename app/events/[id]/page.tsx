@@ -22,15 +22,15 @@ type EventInfo = {
 };
 
 const SEEDED: Record<string, { name: string; detail: string; price: string }> = {
-  "campus-show": {
+  "7": {
     name: "Campus Show Nov 30",
     detail: "Free entry, 200 seats, 1 ticket per wallet.",
     price: "Free",
   },
-  "builders-meetup": {
+  "8": {
     name: "Builders Meetup Dec 5",
     detail: "Paid entry in test QOR, proves the payment path.",
-    price: "Paid",
+    price: "1 QOR",
   },
 };
 
@@ -42,7 +42,7 @@ function useEvent(id: string | null, contract: `0x${string}` | undefined) {
     let cancelled = false;
     async function load() {
       setLoading(true);
-      if (id === null || SEEDED[id] || !contract) {
+      if (id === null || !contract) {
         if (!cancelled) {
           setEvent(null);
           setLoading(false);
@@ -199,7 +199,7 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
               </a>
             </>
           ) : (
-            "Seeded demo event"
+            "Seeded demo event, connect to testnet for live data"
           )}
         </p>
         <h1 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-[-0.02em]">

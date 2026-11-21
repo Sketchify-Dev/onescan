@@ -48,7 +48,8 @@ Test accounts: use two QoreX wallets, one organizer and one attendee. Faucet: Qo
 - forged check-in: https://explore.qore.network/tx/0xd8a3e3d106a19dd600ded6c3acae9fbe37d2fe83078807b4f0c5f0a1994b7b56 (reverted, PqCheckFailed)
 
 Reproduce: `DEPLOYER_KEY=0x... node scripts/proof-cycle.mjs`. Revert txs are sent raw with explicit gas (viem `writeContract` simulates first and never broadcasts a revert).
-- Events scanned so far: event 1 (live scan from the UI wallet), event 2 forge-test, events 3-6 proof cycles.
+- Events scanned so far: event 1 (live scan from the UI wallet), event 2 forge-test, events 3-6 proof cycles, events 7-8 seeded demos (Campus Show Nov 30, Builders Meetup Dec 5).
+- Seeded demo events: event 7 Campus Show Nov 30 (free, 200 seats) https://explore.qore.network/tx/0x44827b688d7033cb657b7e4d56afbe1d865c1711b32f5b695cbd993f37b20a8e, event 8 Builders Meetup Dec 5 (paid 1 test QOR, 100 seats) https://explore.qore.network/tx/0xf2addba6a83dda3b9979d91124bac11a046fa6784d89532c418256f7eaa097b4. Seed: `DEPLOYER_KEY=0x... node scripts/seed-events.mjs` (open a window first: `node scripts/onboard.cjs`).
 
 ## Commands
 
