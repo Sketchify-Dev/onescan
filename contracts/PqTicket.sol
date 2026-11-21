@@ -11,6 +11,7 @@ contract PqTicket {
 
   struct EventInfo {
     address organizer;
+    bytes organizerPqKey;
     string name;
     uint64 dateUnix;
     uint256 price;
@@ -33,6 +34,7 @@ contract PqTicket {
   mapping(uint256 => Ticket) public tickets;
   mapping(uint256 => mapping(address => bool)) public hasTicket;
   mapping(uint256 => mapping(address => bool)) public isScanner;
+  mapping(uint256 => mapping(address => bytes)) public scannerPqKey;
   mapping(uint256 => address[]) public eventScanners;
 
   event EventCreated(uint256 indexed eventId, address indexed organizer, string name);
@@ -59,13 +61,18 @@ contract PqTicket {
     uint64 dateUnix,
     uint256 price,
     uint256 maxSupply,
-    address[] calldata scanners
+    address[] calldata scanners,
+    bytes[] calldata scannerKeys,
+    bytes calldata organizerKey
   ) external returns (uint256 eventId) {
     require(maxSupply > 0, "maxSupply 0");
     require(scanners.length <= 3, "max 3 scanners");
+    require(scanners.length == scannerKeys.length, "key mismatch");
+    require(organizerKey.length > 0, "organizer key needed");
     eventId = nextEventId++;
     EventInfo storage e = events[eventId];
     e.organizer = msg.sender;
+    e.organizerPqKey = organizerKey;
     e.name = name;
     e.dateUnix = dateUnix;
     e.price = price;
@@ -74,17 +81,20 @@ contract PqTicket {
     for (uint256 i = 0; i < scanners.length; i++) {
       if (scanners[i] != address(0) && !isScanner[eventId][scanners[i]]) {
         isScanner[eventId][scanners[i]] = true;
+        scannerPqKey[eventId][scanners[i]] = scannerKeys[i];
         eventScanners[eventId].push(scanners[i]);
       }
     }
     emit EventCreated(eventId, msg.sender, name);
   }
 
-  function addScanner(uint256 eventId, address scanner) external onlyOrganizer(eventId) {
+  function addScanner(uint256 eventId, address scanner, bytes calldata scannerKey) external onlyOrganizer(eventId) {
     require(eventScanners[eventId].length < 3, "max 3 scanners");
     require(scanner != address(0), "zero scanner");
     require(!isScanner[eventId][scanner], "already scanner");
+    require(scannerKey.length > 0, "scanner key needed");
     isScanner[eventId][scanner] = true;
+    scannerPqKey[eventId][scanner] = scannerKey;
     eventScanners[eventId].push(scanner);
     emit ScannerAdded(eventId, scanner);
   }
@@ -102,24 +112,26 @@ contract PqTicket {
     emit Minted(eventId, ticketId, msg.sender);
   }
 
-  function _pqCheck(uint256 eventId, bytes calldata pqSignature, bytes calldata pqMessage) internal view {
-    bool registered;
-    uint8 algorithmId;
-    bytes memory pubkey;
-    (registered, algorithmId, pubkey) = IQorePQC(PQC_PRECOMPILE).pqcKeyStatus(msg.sender);
-    if (!registered) revert PqCheckFailed();
-    bool valid = IQorePQC(PQC_PRECOMPILE).pqcVerify(pubkey, pqSignature, pqMessage);
+  function _pqCheck(address actor, bytes memory expectedKey, bytes calldata pqSignature, bytes calldata pqMessage) internal view virtual {
+    if (expectedKey.length == 0) revert PqCheckFailed();
+    bool valid = IQorePQC(PQC_PRECOMPILE).pqcVerify(expectedKey, pqSignature, pqMessage);
     if (!valid) revert PqCheckFailed();
-    algorithmId;
-    eventId;
+    actor;
   }
 
   function checkIn(uint256 ticketId, bytes calldata pqSignature, bytes calldata pqMessage) external {
     Ticket storage t = tickets[ticketId];
     EventInfo storage e = events[t.eventId];
-    if (msg.sender != e.organizer && !isScanner[t.eventId][msg.sender]) revert NotAuthorized();
+    bytes memory actorKey;
+    if (msg.sender == e.organizer) {
+      actorKey = e.organizerPqKey;
+    } else if (isScanner[t.eventId][msg.sender]) {
+      actorKey = scannerPqKey[t.eventId][msg.sender];
+    } else {
+      revert NotAuthorized();
+    }
     if (t.used) revert AlreadyUsed();
-    _pqCheck(t.eventId, pqSignature, pqMessage);
+    _pqCheck(msg.sender, actorKey, pqSignature, pqMessage);
     t.used = true;
     emit CheckedIn(t.eventId, ticketId, msg.sender);
   }

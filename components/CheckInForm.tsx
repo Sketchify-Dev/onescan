@@ -13,6 +13,7 @@ type Result =
 export function CheckInForm() {
   const { address, connected, getWalletClient } = useWallet();
   const [ticketId, setTicketId] = useState("");
+  const [secretKey, setSecretKey] = useState("");
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<Result>({ kind: "idle" });
   const { address: contract } = deployments();
@@ -22,6 +23,10 @@ export function CheckInForm() {
     setResult({ kind: "idle" });
     if (!ticketId.trim()) {
       setResult({ kind: "error", message: "Enter a ticket ID or scan a QR code first." });
+      return;
+    }
+    if (!secretKey.trim()) {
+      setResult({ kind: "error", message: "Paste the event signing key from creation." });
       return;
     }
     if (!contract) {
@@ -36,12 +41,12 @@ export function CheckInForm() {
     setPending(true);
     try {
       const { mldsa, shake256 } = await import("@qorechain/pqc");
-      const { publicKey, secretKey } = mldsa.keygen();
+      const secret = Uint8Array.from(Buffer.from(secretKey.trim().replace(/^0x/, ""), "hex"));
       const message = shake256(
         new TextEncoder().encode(`pqticket:checkin:${ticketId.trim()}`),
         32
       );
-      const signature = mldsa.sign(secretKey, message);
+      const signature = mldsa.sign(secret, message);
       const toHex = (b: Uint8Array) => `0x${Buffer.from(b).toString("hex")}` as const;
       const hash = await wallet.writeContract({
         address: contract,
@@ -51,7 +56,6 @@ export function CheckInForm() {
         account: address,
         chain: wallet.chain,
       } as never);
-      void publicKey;
       setResult({ kind: "ok", tx: hash as string });
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Check in failed.";
@@ -84,6 +88,24 @@ export function CheckInForm() {
             inputMode="numeric"
             className="min-h-[44px] rounded-xl border border-line bg-transparent px-4 font-mono text-[16px] tabular-nums outline-none focus:border-accent"
           />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="session-key" className="text-sm font-medium">
+            Event signing key
+          </label>
+          <input
+            id="session-key"
+            value={secretKey}
+            onChange={(e) => setSecretKey(e.target.value)}
+            placeholder="0x... secret from event creation"
+            autoComplete="off"
+            spellCheck={false}
+            className="min-h-[44px] rounded-xl border border-line bg-transparent px-4 font-mono text-[16px] outline-none focus:border-accent"
+          />
+          <p className="text-[13px] leading-relaxed text-ink-muted">
+            Shown once at event creation. A forged classical only call without
+            this key reverts onchain.
+          </p>
         </div>
         <button
           type="submit"

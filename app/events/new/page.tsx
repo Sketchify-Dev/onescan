@@ -10,7 +10,7 @@ import { ConnectButton } from "@/components/ConnectButton";
 type Status =
   | { kind: "idle" }
   | { kind: "error"; message: string }
-  | { kind: "ok"; tx: string };
+  | { kind: "ok"; tx: string; organizerSecret: string };
 
 export default function NewEventPage() {
   const { address, connected, getWalletClient } = useWallet();
@@ -65,15 +65,26 @@ export default function NewEventPage() {
         .map((s) => s.trim())
         .filter(Boolean) as `0x${string}`[];
       const dateUnix = BigInt(Math.floor(new Date(date).getTime() / 1000));
+      const { mldsa } = await import("@qorechain/pqc");
+      const { publicKey: organizerKey, secretKey: organizerSecret } = mldsa.keygen();
+      const toHex = (b: Uint8Array) => `0x${Buffer.from(b).toString("hex")}` as const;
       const hash = await wallet.writeContract({
         address: contract,
         abi: PQTICKET_ABI,
         functionName: "createEvent",
-        args: [name.trim(), dateUnix, parseEther(price || "0"), BigInt(supply), scannerList],
+        args: [
+          name.trim(),
+          dateUnix,
+          parseEther(price || "0"),
+          BigInt(supply),
+          scannerList,
+          scannerList.map(() => toHex(organizerKey)),
+          toHex(organizerKey),
+        ],
         account: address,
         chain: wallet.chain,
       } as never);
-      setStatus({ kind: "ok", tx: hash as string });
+      setStatus({ kind: "ok", tx: hash as string, organizerSecret: toHex(organizerSecret) });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Creation failed.";
       setStatus({ kind: "error", message: msg.slice(0, 220) });
@@ -161,7 +172,8 @@ export default function NewEventPage() {
             className="rounded-xl border border-line bg-transparent px-4 py-3 font-mono text-sm outline-none focus:border-accent"
           />
           <p className="text-[13px] leading-relaxed text-ink-muted">
-            Door staff wallets. Only these plus you can check tickets in.
+            Door staff wallets. Only these plus you can check tickets in. In
+            v1 they share this event signing key, per scanner keys come next.
           </p>
         </div>
         {status.kind === "error" && (
@@ -170,12 +182,21 @@ export default function NewEventPage() {
           </p>
         )}
         {status.kind === "ok" && (
-          <p role="status" className="rounded-xl border border-success/40 px-4 py-3 text-sm text-success">
-            Event created.{" "}
-            <a href={`${EXPLORER}/tx/${status.tx}`} className="underline underline-offset-4">
-              View on explorer
-            </a>
-          </p>
+          <div role="status" className="flex flex-col gap-2 rounded-xl border border-success/40 px-4 py-3 text-sm">
+            <p className="text-success">
+              Event created.{" "}
+              <a href={`${EXPLORER}/tx/${status.tx}`} className="underline underline-offset-4">
+                View on explorer
+              </a>
+            </p>
+            <p className="text-ink-muted">
+              Save this event signing key now. It checks tickets in at the door.
+              It shows once.
+            </p>
+            <code className="break-all rounded-lg border border-line p-3 font-mono text-xs">
+              {status.organizerSecret}
+            </code>
+          </div>
         )}
         <button
           type="submit"

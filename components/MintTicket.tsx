@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useWallet } from "@/lib/wallet";
+import { usePqStatus } from "@/lib/usePqStatus";
 import { deployments, EXPLORER } from "@/lib/chain";
 import { PQTICKET_ABI } from "@/lib/contract";
 
 export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: bigint }) {
   const { address, connected, getWalletClient } = useWallet();
+  const pq = usePqStatus(address);
   const [pending, setPending] = useState(false);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -58,9 +60,19 @@ export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: b
 
   return (
     <div className="flex flex-col gap-3">
+      {pq.kind === "registered" && (
+        <p role="status" className="text-sm text-success">
+          PQ ready: ML-DSA-87 key registered onchain (algorithm {pq.algorithmId}).
+        </p>
+      )}
+      {pq.kind === "unregistered" && (
+        <p role="alert" className="text-sm text-danger">
+          {pq.message}
+        </p>
+      )}
       <button
         onClick={mint}
-        disabled={pending}
+        disabled={pending || pq.kind !== "registered"}
         className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95 disabled:opacity-50"
       >
         {pending ? "Minting." : "Mint ticket"}
