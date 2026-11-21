@@ -33,12 +33,13 @@ Hackathon Prompt Playbook PDF).
   ease-out, 100ms stagger) plus pop on result cards, visible focus ring,
   copy button for the event signing key, mint now waits for the receipt and
   parses the Minted event so the QR shows the real ticket ID.
-- Landing redesign: premium editorial direction. Clamp-scaled hero with
-eyebrow pill, ticket stub preview card with live contract link, five-tx
-onchain proof strip, numbered how-to-test list, inverted CTA band. All
-within the 5-token system, no gradients, 44px targets, reduced-motion
-safe. Tier A skills applied: better-colors, better-typography,
-better-layout, better-ui.
+- Landing redesign: dark cinematic direction. Full-bleed dark hero with
+display headline, ticket stub panel with live contract link, explorer
+proof ledger, two live seeded events (IDs 7 and 8), five-step test list,
+guarantee rows, inverted CTA band, footer with oversized wordmark close.
+All within the 5-token system, no gradients, 44px targets, reduced-motion
+safe. Tier A skills applied: design-taste-frontend, better-colors,
+better-typography, better-layout, better-ui.
 - Human contribution: picked the 4 resources, rejected the rest, verified
   each page renders locally at 200 with icons and motion classes present.
 
