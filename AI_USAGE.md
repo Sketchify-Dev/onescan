@@ -4,7 +4,12 @@ Best AI Native Build evidence for OneScan, QoreChain Developer Fest.
 
 ## Workflow
 
-- Coding agent (Claude Code) for scaffolding, contract, frontend, tests, docs. Human reviewed every file, ran builds, and made all product calls.
+- Coding partner: Claude Code for scaffolding, contract, frontend, tests,
+docs, deploys, and the landing redesign. Human reviewed every file, ran
+builds, and made all product calls.
+- Advisor: ChatGPT for strategy, idea validation, submission editing, demo
+coaching, and judge-style review, per `PLAYBOOK.md` (adapted from the AI
+Hackathon Prompt Playbook PDF).
 - QoreChain MCP plus kit READMEs as the source of truth for `pqcVerify` precompile (`0x...0A01`), `pqcKeyStatus` (`0x...0A02`), EVM window rules, and QoreX provider behavior. No memorized APIs.
 - Browser verification loop: build, read the error, fix, rebuild. Every fix in git history with passing `npm run build` plus `forge test`.
 
@@ -28,6 +33,12 @@ Best AI Native Build evidence for OneScan, QoreChain Developer Fest.
   ease-out, 100ms stagger) plus pop on result cards, visible focus ring,
   copy button for the event signing key, mint now waits for the receipt and
   parses the Minted event so the QR shows the real ticket ID.
+- Landing redesign: premium editorial direction. Clamp-scaled hero with
+eyebrow pill, ticket stub preview card with live contract link, five-tx
+onchain proof strip, numbered how-to-test list, inverted CTA band. All
+within the 5-token system, no gradients, 44px targets, reduced-motion
+safe. Tier A skills applied: better-colors, better-typography,
+better-layout, better-ui.
 - Human contribution: picked the 4 resources, rejected the rest, verified
   each page renders locally at 200 with icons and motion classes present.
 
