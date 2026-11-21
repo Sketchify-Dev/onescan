@@ -1,6 +1,6 @@
-# PQ Ticket
+# OneScan
 
-Quantum safe event ticketing on QoreChain testnet. Forwarded QR codes kill small events. PQ Ticket mints soulbound tickets with hybrid post-quantum signatures and checks entry in onchain, so a leaked classical key cannot forge entry.
+Quantum safe event ticketing on QoreChain testnet. Forwarded QR codes kill small events. OneScan mints soulbound tickets with hybrid post-quantum signatures and checks entry in onchain, so a leaked classical key cannot forge entry.
 
 Built for the QoreChain Developer Fest, Build Before Q-Day. Category: Quantum Pass, solo.
 

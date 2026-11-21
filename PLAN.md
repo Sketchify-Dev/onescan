@@ -1,13 +1,13 @@
-# PQ Ticket PLAN.md
+# OneScan PLAN.md
 
 ## 1. Product and category
 
-Product: PQ Ticket, quantum safe event ticketing on QoreChain testnet.
+Product: OneScan, quantum safe event ticketing on QoreChain testnet.
 Category: Quantum Pass, solo, 1 person.
 Level: newcomer path, built to Top Quality standard for fallback prizes.
 
 Problem in one sentence: fake screenshots and forwarded QR codes let anyone walk into small events.
-Solution in one sentence: PQ Ticket mints soulbound tickets with hybrid signatures and checks entry in onchain, so a leaked classical key cannot forge entry.
+Solution in one sentence: OneScan mints soulbound tickets with hybrid signatures and checks entry in onchain, so a leaked classical key cannot forge entry.
 Story for judges: Build Before Q-Day applied to doors, not vaults.
 
 Stackable targets: Quantum Pass merit (10 x $150), Top Quality (7 x $250, needs 70 plus), Regional, Peoples Choice, Best AI Native (add AI_USAGE.md).

@@ -1,6 +1,6 @@
 # AI Usage
 
-Best AI Native Build evidence for PQ Ticket, QoreChain Developer Fest.
+Best AI Native Build evidence for OneScan, QoreChain Developer Fest.
 
 ## Workflow
 
@@ -33,7 +33,7 @@ Best AI Native Build evidence for PQ Ticket, QoreChain Developer Fest.
 
 ## Human contribution
 
-- Category pick after reading all 109 projects plus prize math: Quantum Pass, PQ Ticket, zero clones.
+- Category pick after reading all 109 projects plus prize math: Quantum Pass, OneScan, zero clones.
 - All spec calls: soulbound, paid per event, creator plus scanners, session key flow.
 - Caught and fixed the scanner key flaw: v1 bound the wrong key, rewrote contract plus frontend to enroll keys at creation.
 - Demo script, seeded events, judging story, deadlines, submission checklist.

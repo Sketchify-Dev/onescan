@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PQ Ticket | Quantum safe event ticketing on QoreChain",
+  title: "OneScan | Quantum safe event ticketing on QoreChain",
   description:
     "Soulbound event tickets on QoreChain testnet. One ticket per wallet, one scan at the door, forged entry rejected.",
 };
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               className="inline-flex items-center gap-2 text-lg font-semibold tracking-tight"
             >
               <TicketMark size={22} />
-              PQ Ticket
+              OneScan
             </Link>
             <nav className="flex items-center gap-2 text-sm">
               <Link

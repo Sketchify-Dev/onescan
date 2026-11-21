@@ -1,4 +1,4 @@
-# PQ Ticket design.md (project tier)
+# OneScan design.md (project tier)
 
 ## Skill picks for this task
 

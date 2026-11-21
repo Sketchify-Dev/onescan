@@ -1,4 +1,4 @@
-# PQ Ticket research (build loop step 0)
+# OneScan research (build loop step 0)
 
 Recorded before code. Source: all live projects on build.qorechain.io/projects
 (109 surveyed at spec time) plus fest docs (start, kits, rules pages).
@@ -50,9 +50,9 @@ Recorded before code. Source: all live projects on build.qorechain.io/projects
 
 ## Name options
 
-- PQ Ticket (current). Accurate, but PQ is insider jargon. Weak for judges
-  outside the PQ track.
-- OneScan (recommended). One ticket, one scan. Says the mechanism, easy to
+- PQ Ticket (retired). Accurate, but PQ is insider jargon. Weak for judges
+  outside the PQ track. Renamed to OneScan before repo creation.
+- OneScan (chosen). One ticket, one scan. Says the mechanism, easy to
   say on the demo video, product-like per the playbook.
 - StubQ (alternate). Ticket stub plus QoreChain and Q-Day tie-in. Short.
 - Unforward (alternate). Names the exact enemy, forwarded QRs.

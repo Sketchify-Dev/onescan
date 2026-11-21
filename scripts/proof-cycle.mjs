@@ -1,4 +1,4 @@
-// Full onchain proof cycle for PQ Ticket v1 (Diana testnet, chain 9800).
+// Full onchain proof cycle for OneScan v1 (Diana testnet, chain 9800).
 // Steps: createEvent -> fund buyer -> mint -> checkIn (ok) ->
 // double checkIn (AlreadyUsed) -> forged checkIn with bad PQ sig (PqCheckFailed).
 // Prints every tx hash plus explorer links for the README proof section.

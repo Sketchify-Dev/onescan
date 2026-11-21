@@ -89,7 +89,7 @@ async function HomeContent() {
         </p>
         <h1 className="font-display max-w-2xl text-balance text-4xl font-bold leading-[1.05] tracking-[-0.01em] sm:text-5xl">
           Forwarded QR codes kill small events.{" "}
-          <em className="font-editorial font-normal">PQ Ticket fixes the door.</em>
+          <em className="font-editorial font-normal">OneScan fixes the door.</em>
         </h1>
         <p className="max-w-[70ch] text-pretty text-base leading-relaxed text-ink-muted">
           Each ticket is soulbound to one wallet on QoreChain testnet. The
