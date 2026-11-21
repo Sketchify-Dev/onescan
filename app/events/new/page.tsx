@@ -6,6 +6,9 @@ import { useWallet } from "@/lib/wallet";
 import { deployments, EXPLORER } from "@/lib/chain";
 import { PQTICKET_ABI } from "@/lib/contract";
 import { ConnectButton } from "@/components/ConnectButton";
+import { CheckCircleIcon } from "@phosphor-icons/react";
+import { CopyIcon } from "@phosphor-icons/react";
+import { XCircleIcon } from "@phosphor-icons/react";
 
 type Status =
   | { kind: "idle" }
@@ -96,7 +99,7 @@ export default function NewEventPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-4 py-12 sm:px-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-balance text-3xl font-semibold leading-[1.1] tracking-[-0.02em]">
+        <h1 className="font-display text-balance text-3xl font-semibold leading-[1.1] tracking-[-0.02em]">
           Create an event
         </h1>
         <p className="text-pretty text-base leading-relaxed text-ink-muted">
@@ -177,25 +180,39 @@ export default function NewEventPage() {
           </p>
         </div>
         {status.kind === "error" && (
-          <p role="alert" className="rounded-xl border border-danger/40 px-4 py-3 text-sm text-danger">
-            {status.message}
+          <p role="alert" className="flex items-start gap-2 rounded-xl border border-danger/40 px-4 py-3 text-sm text-danger">
+            <XCircleIcon size={18} weight="regular" aria-hidden="true" className="shrink-0" />
+            <span>{status.message}</span>
           </p>
         )}
         {status.kind === "ok" && (
           <div role="status" className="flex flex-col gap-2 rounded-xl border border-success/40 px-4 py-3 text-sm">
-            <p className="text-success">
-              Event created.{" "}
-              <a href={`${EXPLORER}/tx/${status.tx}`} className="underline underline-offset-4">
-                View on explorer
-              </a>
+            <p className="inline-flex items-center gap-2 text-success">
+              <CheckCircleIcon size={18} weight="regular" aria-hidden="true" />
+              <span>
+                Event created.{" "}
+                <a href={`${EXPLORER}/tx/${status.tx}`} className="underline underline-offset-4">
+                  View on explorer
+                </a>
+              </span>
             </p>
             <p className="text-ink-muted">
               Save this event signing key now. It checks tickets in at the door.
               It shows once.
             </p>
-            <code className="break-all rounded-lg border border-line p-3 font-mono text-xs">
-              {status.organizerSecret}
-            </code>
+            <div className="flex items-start gap-2">
+              <code className="min-w-0 flex-1 break-all rounded-lg border border-line p-3 font-mono text-xs">
+                {status.organizerSecret}
+              </code>
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(status.organizerSecret)}
+                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-line transition-transform enabled:active:scale-95"
+                aria-label="Copy event signing key"
+              >
+                <CopyIcon size={18} weight="regular" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         )}
         <button

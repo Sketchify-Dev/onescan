@@ -15,6 +15,22 @@ Best AI Native Build evidence for PQ Ticket, QoreChain Developer Fest.
 - `lib/wallet.tsx`, `lib/usePqStatus.ts`, `components/*`: QoreX EIP-6963 connect, PQ registration gate, mint, session key check in.
 - `PLAN.md`, `design.md`, `README.md`, this file.
 
+## Design resource pass
+
+- Mapped all 74 resources on resources.cesaroeduardo.com (20 categories) via
+  its Sanity CMS endpoint. Selected 4 with written reasons in `design.md`:
+  Phosphor Icons, Motion In Design, Fontshare (Clash Display 600 for hero and
+  page H1 only), SVGOMG (noted as pre-satisfied by Phosphor paths).
+- Applied: Phosphor outline icons replace text glyphs on every status
+  (CheckCircle, XCircle, ShieldCheck, Ticket, QrCode, Scan, Wallet, Copy),
+  server components use a client icon wrapper to satisfy the build, Clash
+  Display on hero and H1, entrance motion (near-95 percent scale, 300ms
+  ease-out, 100ms stagger) plus pop on result cards, visible focus ring,
+  copy button for the event signing key, mint now waits for the receipt and
+  parses the Minted event so the QR shows the real ticket ID.
+- Human contribution: picked the 4 resources, rejected the rest, verified
+  each page renders locally at 200 with icons and motion classes present.
+
 ## Human contribution
 
 - Category pick after reading all 109 projects plus prize math: Quantum Pass, PQ Ticket, zero clones.

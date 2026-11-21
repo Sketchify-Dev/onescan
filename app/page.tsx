@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import {
+  FingerprintMark,
+  QrMark,
+  ScanMark,
+  ShieldMark,
+  TicketMark,
+} from "@/components/icons";
 import { ConnectButton } from "@/components/ConnectButton";
 
 type Health = {
@@ -36,6 +43,24 @@ const DEMO_EVENTS = [
   },
 ];
 
+const WHY_CARDS = [
+  {
+    title: "Soulbound",
+    body: "No transfer function. A screenshot cannot walk in.",
+    icon: FingerprintMark,
+  },
+  {
+    title: "One scan",
+    body: "used flips true once. The second scan fails onchain.",
+    icon: QrMark,
+  },
+  {
+    title: "PQ gated",
+    body: "Check in needs organizer or scanner PQ approval. Classical key alone reverts.",
+    icon: ShieldMark,
+  },
+];
+
 export default function Home() {
   return (
     <Suspense fallback={<HomeSkeleton />}>
@@ -57,11 +82,12 @@ async function HomeContent() {
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-12 px-4 py-12 sm:px-6 sm:py-16">
-      <section className="flex flex-col gap-6">
-        <p className="text-sm font-medium text-ink-muted">
+      <section className="pq-entrance flex flex-col gap-6">
+        <p className="inline-flex items-center gap-2 text-sm font-medium text-ink-muted">
+          <TicketMark size={16} />
           QoreChain Developer Fest, Quantum Pass
         </p>
-        <h1 className="max-w-2xl text-balance text-4xl font-semibold leading-[1.1] tracking-[-0.02em] sm:text-5xl">
+        <h1 className="font-display max-w-2xl text-balance text-4xl font-semibold leading-[1.1] tracking-[-0.02em] sm:text-5xl">
           Forwarded QR codes kill small events. PQ Ticket fixes the door.
         </h1>
         <p className="max-w-[70ch] text-pretty text-base leading-relaxed text-ink-muted">
@@ -72,14 +98,16 @@ async function HomeContent() {
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href="/events/new"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95"
+            className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95"
           >
+            <TicketMark />
             Create an event
           </Link>
           <Link
             href="/scan"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95"
+            className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95"
           >
+            <ScanMark />
             Open scanner
           </Link>
           <ConnectButton />
@@ -107,7 +135,7 @@ async function HomeContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="pq-entrance pq-entrance-1 flex flex-col gap-4">
         <h2 className="text-2xl font-semibold tracking-[-0.01em]">
           Seeded demo events
         </h2>
@@ -137,7 +165,7 @@ async function HomeContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="pq-entrance pq-entrance-2 flex flex-col gap-4">
         <h2 className="text-2xl font-semibold tracking-[-0.01em]">
           How to test
         </h2>
@@ -157,24 +185,12 @@ async function HomeContent() {
           Why quantum safe
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
-          {[
-            {
-              title: "Soulbound",
-              body: "No transfer function. A screenshot cannot walk in.",
-            },
-            {
-              title: "One scan",
-              body: "used flips true once. The second scan fails onchain.",
-            },
-            {
-              title: "PQ gated",
-              body: "Check in needs organizer or scanner PQ approval. Classical key alone reverts.",
-            },
-          ].map((card) => (
+          {WHY_CARDS.map((card) => (
             <article
               key={card.title}
               className="flex flex-col gap-2 rounded-2xl border border-line p-6"
             >
+              <card.icon size={22} className="text-accent" />
               <h3 className="font-semibold">{card.title}</h3>
               <p className="text-sm leading-relaxed text-ink-muted">
                 {card.body}

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import { TicketMark } from "@/components/icons";
 import { WalletProvider } from "@/lib/wallet";
 import "./globals.css";
+
+import { Geist, Geist_Mono } from "next/font/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +31,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <header className="border-b border-line">
           <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-            <Link href="/" className="text-lg font-semibold tracking-tight">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-lg font-semibold tracking-tight"
+            >
+              <TicketMark size={22} />
               PQ Ticket
             </Link>
             <nav className="flex items-center gap-2 text-sm">

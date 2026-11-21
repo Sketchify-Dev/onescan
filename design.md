@@ -7,6 +7,17 @@
 3. better-layout: grouping, 390 plus 768 plus 1440 checks, tables become stacked cards under 768.
 4. better-ui: exact press, focus, loading, and empty states, verification table.
 
+## External resources (from resources.cesaroeduardo.com, mapped 74 items)
+
+1. Phosphor Icons (icons, free): outline icons at 1.5px beside body text,
+   filled only for active states. Replaces text glyphs for status.
+2. Motion In Design (motion, free): timing reference for the motion tokens
+   below (near-95 percent entrances, ease-out, 100ms stagger).
+3. Fontshare (fonts, free): display face for the hero headline only, body
+   stays on system sans. Loaded via CDN link, display class only.
+4. SVGOMG (web-utility, free): icon paths ship from Phosphor pre-optimized.
+   QR markup stays semantic (role plus label), no decorative SVG shipped.
+
 ## Tokens (only these 5 colors)
 
 --paper: #FAFAF8 page background
@@ -51,5 +62,19 @@ Empty states carry one clear action.
 Entrance near 95 percent scale, ease-out 300ms with 100ms stagger on first load only.
 Press feedback scale 0.96, ease-out 150ms.
 Tab switches and hover feedback instant or 150ms max.
+Status icon change: cross-fade opacity plus scale, 150ms ease-out.
 Reduced motion: cross fade opacity only.
 Modals use solid backdrop, no blur.
+
+## Typefaces
+
+Display: Fontshare Clash Display 600, hero and page H1 only.
+Body and UI: system sans via next/font Geist.
+Mono: Geist Mono for addresses, ticket IDs, block numbers, keys.
+
+## Icons
+
+Phosphor outline set at 1.5px beside body text, 2px beside semibold.
+Status icons always paired with text label, never color alone.
+Ticket: Ticket. Checked in: CheckCircle. Rejected: XCircle. PQ: ShieldCheck.
+QR: QrCode. Copy: Copy. Wallet: Wallet. Key: Key.

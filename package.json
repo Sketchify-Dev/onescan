@@ -12,6 +12,7 @@
     "test:contracts": "forge test"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@qorechain/evm": "^0.14.0",
     "@qorechain/pqc": "^0.2.3",
     "@qorechain/qoresign": "^0.2.0",

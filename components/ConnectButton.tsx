@@ -1,5 +1,6 @@
 "use client";
 
+import { WalletIcon } from "@phosphor-icons/react";
 import { useWallet } from "@/lib/wallet";
 
 export function ConnectButton() {
@@ -12,8 +13,9 @@ export function ConnectButton() {
         <button
           onClick={connect}
           disabled={connecting}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95 disabled:opacity-50"
+          className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95 disabled:opacity-50"
         >
+          <WalletIcon size={18} weight="regular" aria-hidden="true" />
           {connecting ? "Connecting." : "Connect QoreX"}
         </button>
         {error && (
@@ -32,7 +34,7 @@ export function ConnectButton() {
       </span>
       <button
         onClick={disconnect}
-        className="inline-flex min-h-[44px] items-center rounded-full border border-line px-5 text-sm font-medium"
+        className="inline-flex min-h-[44px] items-center rounded-full border border-line px-5 text-sm font-medium transition-transform enabled:active:scale-95"
       >
         Disconnect
       </button>

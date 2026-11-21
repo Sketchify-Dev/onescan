@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useWallet } from "@/lib/wallet";
 import { deployments, EXPLORER } from "@/lib/chain";
 import { PQTICKET_ABI } from "@/lib/contract";
+import { CheckCircleIcon } from "@phosphor-icons/react";
+import { XCircleIcon } from "@phosphor-icons/react";
 
 type Result =
   | { kind: "idle" }
@@ -121,8 +123,13 @@ export function CheckInForm() {
         )}
       </form>
       {result.kind === "ok" && (
-        <div role="status" className="flex items-start gap-3 rounded-2xl border border-success/40 p-5">
-          <span aria-hidden="true" className="text-xl text-success">✓</span>
+        <div role="status" className="pq-pop flex items-start gap-3 rounded-2xl border border-success/40 p-5">
+          <CheckCircleIcon
+            size={24}
+            weight="regular"
+            aria-hidden="true"
+            className="shrink-0 text-success"
+          />
           <p className="text-[16px] leading-relaxed text-success">
             Checked in.{" "}
             <a href={`${EXPLORER}/tx/${result.tx}`} className="underline underline-offset-4">
@@ -132,8 +139,13 @@ export function CheckInForm() {
         </div>
       )}
       {result.kind === "error" && (
-        <div role="alert" className="flex items-start gap-3 rounded-2xl border border-danger/40 p-5">
-          <span aria-hidden="true" className="text-xl text-danger">✕</span>
+        <div role="alert" className="pq-pop flex items-start gap-3 rounded-2xl border border-danger/40 p-5">
+          <XCircleIcon
+            size={24}
+            weight="regular"
+            aria-hidden="true"
+            className="shrink-0 text-danger"
+          />
           <p className="text-[16px] leading-relaxed text-danger">{result.message}</p>
         </div>
       )}
