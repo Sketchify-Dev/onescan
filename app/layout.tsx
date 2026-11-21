@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { WalletProvider } from "@/lib/wallet";
 import "./globals.css";
@@ -28,22 +29,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <header className="border-b border-line">
           <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-            <a href="/" className="text-lg font-semibold tracking-tight">
+            <Link href="/" className="text-lg font-semibold tracking-tight">
               PQ Ticket
-            </a>
+            </Link>
             <nav className="flex items-center gap-2 text-sm">
-              <a
+              <Link
                 href="/events/new"
                 className="rounded-full px-4 py-2 font-medium hover:bg-ink/5"
               >
                 Create event
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/scan"
                 className="rounded-full px-4 py-2 font-medium hover:bg-ink/5"
               >
                 Scan
-              </a>
+              </Link>
             </nav>
           </div>
         </header>

@@ -11,43 +11,40 @@ type PqState =
   | { kind: "unregistered"; message: string }
   | { kind: "unavailable"; message: string };
 
+async function fetchPqStatus(account: Address): Promise<PqState> {
+  try {
+    const res = (await publicClient().readContract({
+      address: PRECOMPILE_ADDRESSES.pqcKeyStatus,
+      abi: IQORE_PQC_ABI,
+      functionName: "pqcKeyStatus",
+      args: [account],
+    })) as unknown as [boolean, number, `0x${string}`];
+    const [registered, algorithmId] = res;
+    if (registered) return { kind: "registered", algorithmId: Number(algorithmId) };
+    return {
+      kind: "unregistered",
+      message:
+        "No ML-DSA-87 key registered for this wallet. Register your PQ key in QoreX first, then mint.",
+    };
+  } catch (e: unknown) {
+    return {
+      kind: "unavailable",
+      message: e instanceof Error ? e.message.slice(0, 160) : "PQ status unreadable.",
+    };
+  }
+}
+
 export function usePqStatus(account: Address | null) {
-  const [state, setState] = useState<PqState>({ kind: "checking" });
+  const [state, setState] = useState<PqState>(() =>
+    account ? { kind: "checking" } : { kind: "unavailable", message: "Connect a wallet first." }
+  );
 
   useEffect(() => {
-    if (!account) {
-      setState({ kind: "unavailable", message: "Connect a wallet first." });
-      return;
-    }
+    if (!account) return;
     let cancelled = false;
-    setState({ kind: "checking" });
-    publicClient()
-      .readContract({
-        address: PRECOMPILE_ADDRESSES.pqcKeyStatus,
-        abi: IQORE_PQC_ABI,
-        functionName: "pqcKeyStatus",
-        args: [account],
-      })
-      .then((res) => {
-        if (cancelled) return;
-        const [registered, algorithmId] = res as unknown as [boolean, number, `0x${string}`];
-        if (registered) {
-          setState({ kind: "registered", algorithmId: Number(algorithmId) });
-        } else {
-          setState({
-            kind: "unregistered",
-            message:
-              "No ML-DSA-87 key registered for this wallet. Register your PQ key in QoreX first, then mint.",
-          });
-        }
-      })
-      .catch((e: unknown) => {
-        if (cancelled) return;
-        setState({
-          kind: "unavailable",
-          message: e instanceof Error ? e.message.slice(0, 160) : "PQ status unreadable.",
-        });
-      });
+    fetchPqStatus(account).then((next) => {
+      if (!cancelled) setState(next);
+    });
     return () => {
       cancelled = true;
     };

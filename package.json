@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "compile": "node scripts/compile.cjs",
+    "deploy": "node scripts/deploy.cjs",
+    "test:contracts": "forge test"
   },
   "dependencies": {
     "@qorechain/evm": "^0.14.0",

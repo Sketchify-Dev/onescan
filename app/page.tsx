@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { ConnectButton } from "@/components/ConnectButton";
 
@@ -69,18 +70,18 @@ async function HomeContent() {
           classical key cannot forge entry or transfer the ticket.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <a
+          <Link
             href="/events/new"
             className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform enabled:active:scale-95"
           >
             Create an event
-          </a>
-          <a
+          </Link>
+          <Link
             href="/scan"
             className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95"
           >
             Open scanner
-          </a>
+          </Link>
           <ConnectButton />
         </div>
         <div
@@ -125,12 +126,12 @@ async function HomeContent() {
               <p className="text-sm leading-relaxed text-ink-muted">
                 {event.detail}
               </p>
-              <a
+              <Link
                 href={`/events/${event.id}`}
                 className="inline-flex min-h-[44px] items-center font-medium text-accent underline-offset-4 hover:underline"
               >
                 View event
-              </a>
+              </Link>
             </article>
           ))}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 import { formatEther } from "viem";
@@ -33,57 +33,77 @@ const SEEDED: Record<string, { name: string; detail: string; price: string }> = 
   },
 };
 
-export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
-  const [id, setId] = useState<string | null>(null);
+function useEvent(id: string | null, contract: `0x${string}` | undefined) {
   const [event, setEvent] = useState<EventInfo | null>(null);
   const [loading, setLoading] = useState(true);
-  const { address } = useWallet();
-  const { address: contract } = deployments();
 
   useEffect(() => {
-    params.then((p) => setId(p.id));
-  }, [params]);
-
-  useEffect(() => {
-    if (id === null) return;
-    if (SEEDED[id] || !contract) {
-      setLoading(false);
-      return;
-    }
-    const numeric = Number(id);
-    if (!Number.isInteger(numeric) || numeric < 1) {
-      setLoading(false);
-      return;
-    }
-    publicClient()
-      .readContract({
-        address: contract,
-        abi: PQTICKET_ABI,
-        functionName: "events",
-        args: [BigInt(numeric)],
-      } as never)
-      .then((res) => {
-        const [organizer, name, dateUnix, price, maxSupply, minted, active] =
-          res as [unknown, unknown, unknown, unknown, unknown, unknown, unknown] as [
-            `0x${string}`,
-            string,
-            bigint,
-            bigint,
-            bigint,
-            bigint,
-            boolean
-          ];
-        if (!name) {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      if (id === null || SEEDED[id] || !contract) {
+        if (!cancelled) {
+          setEvent(null);
           setLoading(false);
-          return;
         }
-        setEvent({ organizer, name, dateUnix, price, maxSupply, minted, active });
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+        return;
+      }
+      const numeric = Number(id);
+      if (!Number.isInteger(numeric) || numeric < 1) {
+        if (!cancelled) {
+          setEvent(null);
+          setLoading(false);
+        }
+        return;
+      }
+      try {
+        const res = (await publicClient().readContract({
+          address: contract,
+          abi: PQTICKET_ABI,
+          functionName: "events",
+          args: [BigInt(numeric)],
+        } as never)) as unknown as [
+          `0x${string}`,
+          `0x${string}`,
+          string,
+          bigint,
+          bigint,
+          bigint,
+          bigint,
+          boolean
+        ];
+        if (!cancelled) {
+          const [, organizer, name, dateUnix, price, maxSupply, minted, active] = res;
+          setEvent(
+            name
+              ? { organizer, name, dateUnix, price, maxSupply, minted, active }
+              : null
+          );
+          setLoading(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setEvent(null);
+          setLoading(false);
+        }
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [id, contract]);
 
-  if (id === null || loading) {
+  return { event, loading };
+}
+
+function EventBody({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { address } = useWallet();
+  const { address: contract } = deployments();
+  const { event, loading } = useEvent(id, contract);
+
+  if (loading) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-12 sm:px-6">
         <p className="text-ink-muted">Loading event.</p>
@@ -175,5 +195,19 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
         )}
       </section>
     </main>
+  );
+}
+
+export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
+  return (
+    <Suspense
+      fallback={
+        <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-12 sm:px-6">
+          <p className="text-ink-muted">Loading event.</p>
+        </main>
+      }
+    >
+      <EventBody params={params} />
+    </Suspense>
   );
 }
