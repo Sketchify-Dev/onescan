@@ -37,7 +37,18 @@ Test accounts: use two QoreX wallets, one organizer and one attendee. Faucet: Qo
 - EVM RPC: https://evm-testnet.qore.host
 - REST: https://api-testnet.qore.host
 - Explorer: https://explore.qore.network
-- Contract: set `NEXT_PUBLIC_PQTICKET_ADDRESS` after deploy, address posted in project page
+- Contract: `0xd4a62117c4E5726F5A94a25EB191261510C20daC` (Diana 9800)
+
+## Onchain proof (Diana 9800, all real txs)
+
+- createEvent: https://explore.qore.network/tx/0xac7ce1d476250a25b6bbcd26a210fce35bceb8a6f5a07007eb78e0a9ba1cb026 (event 5)
+- mintTicket: https://explore.qore.network/tx/0xe0932144041438873fd5c8adfdd381cc75d8330a3e80e0a8f9070364ea6340bb (ticket 3)
+- checkIn valid: https://explore.qore.network/tx/0x7af5a98c7f5f0b29523e974ce11cc1297df8aebc647233e8b1e7cf3d76807e57 (success)
+- double check-in: https://explore.qore.network/tx/0xd91577a1de4fcde11eabb6c1943eaff6e9a61e37926e7cf8c0a35cd49e201d8a (reverted, AlreadyUsed)
+- forged check-in: https://explore.qore.network/tx/0xd8a3e3d106a19dd600ded6c3acae9fbe37d2fe83078807b4f0c5f0a1994b7b56 (reverted, PqCheckFailed)
+
+Reproduce: `DEPLOYER_KEY=0x... node scripts/proof-cycle.mjs`. Revert txs are sent raw with explicit gas (viem `writeContract` simulates first and never broadcasts a revert).
+- Events scanned so far: event 1 (live scan from the UI wallet), event 2 forge-test, events 3-6 proof cycles.
 
 ## Commands
 
