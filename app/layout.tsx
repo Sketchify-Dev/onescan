@@ -4,12 +4,7 @@ import { TicketMark } from "@/components/icons";
 import { WalletProvider } from "@/lib/wallet";
 import "./globals.css";
 
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Geist_Mono } from "next/font/google";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -26,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <header className="border-b border-line">

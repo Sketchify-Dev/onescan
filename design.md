@@ -68,9 +68,14 @@ Modals use solid backdrop, no blur.
 
 ## Typefaces
 
-Display: Fontshare Clash Display 600, hero and page H1 only.
-Body and UI: system sans via next/font Geist.
+Display: Fontshare Cabinet Grotesk 700/800, hero and page H1 only.
+Editorial accent: Instrument Serif 400 italic contrast inside the hero
+statement only, never for UI.
+Body and UI: General Sans 500/600, confident product voice, not a default
+template face.
 Mono: Geist Mono for addresses, ticket IDs, block numbers, keys.
+Rule: one display face plus one editorial accent plus one body face maximum.
+Typography is chosen per product in the design brief, never defaulted.
 
 ## Icons
 

@@ -12,7 +12,7 @@ export default function ScanPage() {
           <ScanIcon size={16} weight="regular" aria-hidden="true" />
           Door scanner
         </p>
-        <h1 className="font-display text-balance text-3xl font-semibold leading-[1.1] tracking-[-0.02em]">
+        <h1 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-[-0.02em]">
           Door scanner
         </h1>
         <p className="text-pretty leading-relaxed text-ink-muted">

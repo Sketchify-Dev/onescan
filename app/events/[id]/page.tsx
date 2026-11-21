@@ -169,7 +169,7 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
   if (!event && !seed) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-12 sm:px-6">
-        <h1 className="font-display text-3xl font-semibold">Event not found</h1>
+        <h1 className="font-display text-3xl font-bold">Event not found</h1>
         <p className="text-ink-muted">Check the event ID or create a new one.</p>
         <Link href="/" className="font-medium text-accent underline-offset-4 hover:underline">
           Back home
@@ -202,7 +202,7 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
             "Seeded demo event"
           )}
         </p>
-        <h1 className="font-display text-balance text-3xl font-semibold leading-[1.1] tracking-[-0.02em]">
+        <h1 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-[-0.02em]">
           {title}
         </h1>
         <p className="text-pretty leading-relaxed text-ink-muted">{detail}</p>

@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=clash-display@600&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@500,600&f[]=cabinet-grotesk@700,800&f[]=instrument-serif@400&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -34,9 +34,10 @@
   --color-accent-ink: var(--accent-ink);
   --color-success: var(--success);
   --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "General Sans", var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-display: "Clash Display", var(--font-geist-sans), system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", "General Sans", system-ui, sans-serif;
+  --font-editorial: "Instrument Serif", Georgia, serif;
 }
 
 body {
@@ -46,6 +47,12 @@ body {
 
 .font-display {
   font-family: var(--font-display);
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 :focus-visible {

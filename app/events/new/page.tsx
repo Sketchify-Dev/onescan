@@ -99,7 +99,7 @@ export default function NewEventPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-4 py-12 sm:px-6">
       <div className="flex flex-col gap-2">
-        <h1 className="font-display text-balance text-3xl font-semibold leading-[1.1] tracking-[-0.02em]">
+        <h1 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-[-0.02em]">
           Create an event
         </h1>
         <p className="text-pretty text-base leading-relaxed text-ink-muted">
