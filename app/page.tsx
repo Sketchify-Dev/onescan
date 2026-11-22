@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, type CSSProperties } from "react";
 import {
   FingerprintMark,
   QrMark,
@@ -8,6 +8,7 @@ import {
   TicketMark,
 } from "@/components/icons";
 import { HeroField } from "@/components/HeroField";
+import { RevealInit } from "@/components/Reveal";
 import { EXPLORER, deployments } from "@/lib/chain";
 
 type Health = {
@@ -137,6 +138,7 @@ async function HomeContent() {
 
   return (
     <main className="flex w-full flex-1 flex-col">
+      <RevealInit />
       <section className="bg-[#0B0C12] text-[#F4F3ED]">
         <div className="relative overflow-hidden">
           <HeroField className="absolute inset-0 h-full w-full" />
@@ -152,7 +154,7 @@ async function HomeContent() {
             </div>
           </div>
           <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-            <div className="pq-entrance flex flex-col items-start gap-6">
+            <div className="pq-entrance flex min-w-0 flex-col items-start gap-6">
               <p className="flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-white/60">
                 <span
                   aria-hidden="true"
@@ -163,11 +165,15 @@ async function HomeContent() {
               <p className="text-[15px] leading-relaxed text-white/70">
                 QoreChain Developer Fest, Quantum Pass, running on testnet Diana.
               </p>
-              <h1 className="font-display max-w-2xl text-balance text-[clamp(3rem,8vw,5.25rem)] font-bold leading-[0.95] tracking-[-0.03em]">
-                Forwarded QR codes kill small events.{" "}
-                <em className="font-editorial font-normal tracking-normal text-[#C7C9FF]">
-                  OneScan holds the door.
-                </em>
+              <h1 className="split font-display w-full max-w-2xl min-w-0 text-balance break-words text-[clamp(2.5rem,10vw,5.25rem)] font-bold leading-[0.95] tracking-[-0.03em]">
+                <span className="split-line">
+                  <span>Forwarded QR codes kill small events.</span>
+                </span>
+                <span className="split-line">
+                  <em className="font-editorial font-normal tracking-normal text-[#C7C9FF]">
+                    OneScan holds the door.
+                  </em>
+                </span>
               </h1>
               <p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-white/75">
                 Each ticket is soulbound to one wallet on QoreChain testnet
@@ -178,17 +184,19 @@ async function HomeContent() {
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Link
                   href="/events/new"
-                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#4F46E5] px-7 font-medium text-white transition-transform active:scale-95"
+                  className="press cta-arrow inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#4F46E5] px-7 font-medium text-white"
                 >
                   <TicketMark />
                   Create an event
+                  <span aria-hidden="true" className="cta-ic">→</span>
                 </Link>
                 <Link
                   href="/scan"
-                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-white/30 px-7 font-medium transition-transform active:scale-95"
+                  className="press cta-arrow inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-white/30 px-7 font-medium"
                 >
                   <ScanMark />
                   Open scanner
+                  <span aria-hidden="true" className="cta-ic">→</span>
                 </Link>
               </div>
               <div
@@ -198,7 +206,7 @@ async function HomeContent() {
               >
                 <span
                   aria-hidden="true"
-                  className={`inline-block h-2.5 w-2.5 rounded-full ${health.ok ? "bg-[#4ADE80]" : "bg-[#F87171]"}`}
+                  className={`inline-block h-2.5 w-2.5 rounded-full ${health.ok ? "bg-[#4ADE80] dot-pulse" : "bg-[#F87171]"}`}
                 />
                 {health.ok ? (
                   <span>
@@ -217,7 +225,7 @@ async function HomeContent() {
             <aside
               aria-label="Sample soulbound ticket"
               data-ui
-              className="pq-entrance pq-entrance-1 flex flex-col gap-5 self-center rounded-3xl border border-white/15 bg-white/[0.05] p-6 sm:p-8"
+              data-reveal className="rv flex flex-col gap-5 self-center rounded-3xl border border-white/15 bg-white/[0.05] p-6 sm:p-8"
             >
               <div className="flex items-center justify-between gap-3">
                 <p className="text-[15px] font-semibold text-white/70">
@@ -281,7 +289,7 @@ async function HomeContent() {
             <div className="border-x border-ink/10" />
           </div>
         </div>
-        <section className="pq-entrance pq-entrance-2 flex flex-col gap-6">
+        <section data-reveal className="rv flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
             <ChapterLabel index="Chapter 02" title="the receipts" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
@@ -296,7 +304,9 @@ async function HomeContent() {
             {PROOF_TXS.map((tx) => (
               <li
                 key={tx.hash}
-                className="flex flex-col gap-1 border-t border-line py-4 last:border-b sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                data-reveal
+                style={{ "--rv-i": PROOF_TXS.indexOf(tx) } as CSSProperties}
+                className="rv flex flex-col gap-1 border-t border-line py-4 last:border-b sm:flex-row sm:items-center sm:justify-between sm:gap-6"
               >
                 <p className="text-[16px] font-semibold">{tx.label}</p>
                 <a
@@ -310,7 +320,7 @@ async function HomeContent() {
           </ol>
         </section>
 
-        <section className="flex flex-col gap-6">
+        <section data-reveal className="rv flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
             <ChapterLabel index="Chapter 03" title="live demos" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
@@ -325,7 +335,9 @@ async function HomeContent() {
             {DEMO_EVENTS.map((event, index) => (
               <article
                 key={event.id}
-                className={`flex flex-col gap-4 rounded-3xl border border-line p-6 sm:p-8 ${index === 0 ? "pq-entrance pq-entrance-1" : "pq-entrance pq-entrance-2"}`}
+                data-reveal
+                style={{ "--rv-i": index } as CSSProperties}
+                className="rv flex flex-col gap-4 rounded-3xl border border-line p-6 sm:p-8"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
@@ -346,7 +358,7 @@ async function HomeContent() {
                 <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-2">
                   <Link
                     href={`/events/${event.id}`}
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform active:scale-95"
+                    className="press inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink"
                   >
                     <TicketMark size={18} />
                     Open event
@@ -364,7 +376,7 @@ async function HomeContent() {
         </section>
 
         <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-          <div className="flex flex-col gap-3">
+          <div data-reveal className="rv flex flex-col gap-3">
             <ChapterLabel index="Chapter 04" title="the drill" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
               How to test in five steps
@@ -378,7 +390,9 @@ async function HomeContent() {
             {TEST_STEPS.map((step, index) => (
               <li
                 key={step}
-                className="flex gap-4 border-t border-line py-4 last:border-b"
+                data-reveal
+                style={{ "--rv-i": index } as CSSProperties}
+                className="rv flex gap-4 border-t border-line py-4 last:border-b"
               >
                 <span
                   aria-hidden="true"
@@ -392,7 +406,7 @@ async function HomeContent() {
           </ol>
         </section>
 
-        <section className="flex flex-col gap-6">
+        <section data-reveal className="rv flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
             <ChapterLabel index="Chapter 05" title="the guarantees" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
@@ -406,7 +420,9 @@ async function HomeContent() {
             {WHY_ROWS.map((row, index) => (
               <article
                 key={row.title}
-                className={`flex gap-4 p-6 sm:items-start sm:gap-5 sm:p-8 ${index > 0 ? "border-t border-line" : ""}`}
+                data-reveal
+                style={{ "--rv-i": index } as CSSProperties}
+                className={`rv flex gap-4 p-6 sm:items-start sm:gap-5 sm:p-8 ${index > 0 ? "border-t border-line" : ""}`}
               >
                 <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-accent/10">
                   <row.icon size={22} className="text-accent" />
@@ -422,7 +438,7 @@ async function HomeContent() {
           </div>
         </section>
 
-        <section className="flex flex-col items-start gap-5 overflow-hidden rounded-3xl bg-ink px-6 py-10 text-paper sm:px-10 sm:py-14 dark:bg-paper dark:text-ink">
+        <section data-reveal className="rv flex flex-col items-start gap-5 overflow-hidden rounded-3xl bg-ink px-6 py-10 text-paper sm:px-10 sm:py-14 dark:bg-paper dark:text-ink">
           <p className="text-[15px] font-medium opacity-70">
             Built for the door, not the deck
           </p>
@@ -433,17 +449,19 @@ async function HomeContent() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               href="/events/new"
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition-transform active:scale-95"
+              className="press cta-arrow inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink"
             >
               <TicketMark size={18} />
               Create an event
+              <span aria-hidden="true" className="cta-ic">→</span>
             </Link>
             <Link
               href="/scan"
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-paper/30 px-6 font-medium transition-transform active:scale-95 dark:border-ink/30"
+              className="press cta-arrow inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-paper/30 px-6 font-medium dark:border-ink/30"
             >
               <ScanMark size={18} />
               Open scanner
+              <span aria-hidden="true" className="cta-ic">→</span>
             </Link>
           </div>
         </section>

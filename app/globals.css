@@ -43,6 +43,7 @@
 body {
   background: var(--paper);
   color: var(--ink);
+  overflow-x: clip;
 }
 
 .font-display {
@@ -99,12 +100,99 @@ body {
   animation: pq-pop 150ms ease-out both;
 }
 
+/* Stagger plus scroll reveal, after Syncly. One easing for all motion. */
+:root {
+  --pq-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Split line headline reveal, masked lines rise on load (hero only). */
+.split .split-line {
+  display: block;
+  overflow: hidden;
+}
+.split .split-line > span {
+  display: block;
+  transform: translateY(105%);
+  animation: pq-split-rise 0.9s var(--pq-ease) forwards;
+}
+.split .split-line:nth-child(2) > span {
+  animation-delay: 120ms;
+}
+
+/* Scroll reveal: fade plus rise, staggered by --rv-i. */
+.rv {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s var(--pq-ease),
+    transform 0.8s var(--pq-ease);
+  transition-delay: calc(var(--rv-i, 0) * 100ms);
+}
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Live status pulse, Syncly dot treatment on the Diana status. */
+.dot-pulse {
+  animation: pq-pulse 1.8s ease-in-out infinite;
+}
+@keyframes pq-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(74 222 128 / 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+/* Press feedback to 0.96, per better-ui exact value. */
+.press {
+  transition:
+    transform 150ms ease-out,
+    background-color 150ms ease-out,
+    border-color 150ms ease-out;
+}
+.press:active {
+  transform: scale(0.96);
+}
+
+/* Hero CTA arrow nudge on hover, hover capable pointers only. */
+@media (hover: hover) {
+  .cta-arrow .cta-ic {
+    transition: transform 250ms var(--pq-ease);
+  }
+  .cta-arrow:hover .cta-ic {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes pq-split-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pq-entrance,
   .pq-entrance-1,
   .pq-entrance-2,
-  .pq-pop {
+  .pq-pop,
+  .split .split-line > span,
+  .dot-pulse {
     animation: none;
+  }
+  .split .split-line > span {
+    transform: none;
+  }
+  .rv {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .press:active {
+    transform: none;
   }
   .transition-transform {
     transition-property: none;
