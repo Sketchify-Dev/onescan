@@ -95,6 +95,18 @@ const WHY_ROWS = [
   },
 ];
 
+function ChapterLabel({ index, title }: { index: string; title: string }) {
+  return (
+    <p className="flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
+      <span
+        aria-hidden="true"
+        className="inline-block h-1.5 w-1.5 rounded-full bg-accent"
+      />
+      {index}, {title}
+    </p>
+  );
+}
+
 const TEST_STEPS = [
   "Install QoreX, switch to testnet Diana, fund with test QOR.",
   "Open a seeded event and mint 1 ticket with QoreX.",
@@ -128,8 +140,26 @@ async function HomeContent() {
       <section className="bg-[#0B0C12] text-[#F4F3ED]">
         <div className="relative overflow-hidden">
           <HeroField className="absolute inset-0 h-full w-full" />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+          >
+            <div className="mx-auto hidden h-full w-full max-w-6xl grid-cols-4 px-4 sm:grid sm:px-6">
+              <div className="border-l border-white/10" />
+              <div className="border-l border-white/10" />
+              <div className="border-l border-white/10" />
+              <div className="border-x border-white/10" />
+            </div>
+          </div>
           <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
             <div className="pq-entrance flex flex-col items-start gap-6">
+              <p className="flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-white/60">
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-[#A5B4FC]"
+                />
+                Chapter 01, the door
+              </p>
               <p className="text-[15px] leading-relaxed text-white/70">
                 QoreChain Developer Fest, Quantum Pass, running on testnet Diana.
               </p>
@@ -234,14 +264,26 @@ async function HomeContent() {
               >
                 View the live event
               </Link>
+              <p className="text-xs text-white/50">
+                Fig. 01, sample soulbound ticket.
+              </p>
             </aside>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-24 px-4 py-16 sm:gap-28 sm:px-6 sm:py-24">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-24 px-4 py-16 sm:gap-28 sm:px-6 sm:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <div className="mx-auto hidden h-full w-full max-w-6xl grid-cols-4 px-4 sm:grid sm:px-6">
+            <div className="border-l border-ink/10" />
+            <div className="border-l border-ink/10" />
+            <div className="border-l border-ink/10" />
+            <div className="border-x border-ink/10" />
+          </div>
+        </div>
         <section className="pq-entrance pq-entrance-2 flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
+            <ChapterLabel index="Chapter 02" title="the receipts" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
               Every claim links to a transaction
             </h2>
@@ -270,6 +312,7 @@ async function HomeContent() {
 
         <section className="flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
+            <ChapterLabel index="Chapter 03" title="live demos" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
               Seeded demo events, live on Diana
             </h2>
@@ -322,6 +365,7 @@ async function HomeContent() {
 
         <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           <div className="flex flex-col gap-3">
+            <ChapterLabel index="Chapter 04" title="the drill" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
               How to test in five steps
             </h2>
@@ -350,6 +394,7 @@ async function HomeContent() {
 
         <section className="flex flex-col gap-6">
           <div className="flex max-w-3xl flex-col gap-3">
+            <ChapterLabel index="Chapter 05" title="the guarantees" />
             <h2 className="font-display text-balance text-3xl font-bold tracking-[-0.01em] sm:text-[2.5rem] sm:leading-[1.1]">
               Why quantum safe
             </h2>
