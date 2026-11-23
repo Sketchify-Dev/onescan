@@ -12,9 +12,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://onescan-qorechain.vercel.app"),
   title: "OneScan | Quantum safe event ticketing on QoreChain",
   description:
     "Soulbound event tickets on QoreChain testnet. One ticket per wallet, one scan at the door, forged entry rejected.",
+  openGraph: {
+    title: "OneScan | Quantum safe event ticketing on QoreChain",
+    description:
+      "Soulbound event tickets on QoreChain testnet. One ticket per wallet, one scan at the door.",
+    url: "https://onescan-qorechain.vercel.app",
+    siteName: "OneScan",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OneScan | Quantum safe event ticketing on QoreChain",
+    description:
+      "Soulbound event tickets on QoreChain testnet. One ticket per wallet, one scan at the door.",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  themeColor: "#4F46E5",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

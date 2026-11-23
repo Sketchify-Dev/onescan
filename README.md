@@ -1,14 +1,24 @@
 # OneScan
 
-Quantum safe event ticketing on QoreChain testnet. Forwarded QR codes kill small events. OneScan mints soulbound tickets with hybrid post-quantum signatures and checks entry in onchain, so a leaked classical key cannot forge entry.
+[![Live](https://img.shields.io/badge/live-onescan--qorechain.vercel.app-4F46E5)](https://onescan-qorechain.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
+[![QoreChain](https://img.shields.io/badge/QoreChain-Diana%209800-4F46E5)](https://explore.qore.network)
+[![Contract](https://img.shields.io/badge/contract-0xd4a6...20dac-141310)](https://explore.qore.network/address/0xd4a62117c4E5726F5A94a25EB191261510C20daC)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Built for the QoreChain Developer Fest, Build Before Q-Day. Category: Quantum Pass, solo.
+**Soulbound event tickets on QoreChain. One ticket per wallet, one scan at the door.**
+
+Forwarded QR codes kill small events. OneScan mints soulbound tickets with hybrid post-quantum signatures and checks entry onchain, so a leaked classical key cannot forge entry.
+
+🔗 **Live:** https://onescan-qorechain.vercel.app
+
+Built for the [QoreChain Developer Fest](https://build.qorechain.io) (Build Before Q-Day, 4 Nov to 2 Dec 2026). Category: Quantum Pass, solo.
 
 ## How to Test
 
 You need QoreX on testnet Diana, plus test QOR from the faucet.
 
-1. Go to the live URL and connect QoreX. Switch to QoreChain Diana, EVM chain 9800.
+1. Go to https://onescan-qorechain.vercel.app and connect QoreX. Switch to QoreChain Diana, EVM chain 9800.
 2. Create an event: name, date, price in test QOR (0 means free), max supply, optional scanner wallets. Save the event signing key shown once.
 3. Mint 1 ticket as an attendee wallet. If your wallet has no registered ML-DSA-87 key, the app tells you to register first in QoreX.
 4. Open Scan as the organizer, paste ticket ID plus the event signing key, check in once. Status: accepted, with explorer link.
@@ -62,7 +72,7 @@ Reproduce: `DEPLOYER_KEY=0x... node scripts/proof-cycle.mjs`. Revert txs are sen
 
 ## Project links
 
-- Fest project page: added at creation
+- Fest project page: add the link here once created (https://build.qorechain.io)
 - Testnet addresses used: posted on project page, format `qor1...` plus `0x...`
 - Video: max 3 min, live testnet mint plus scan plus rejected forge
 - Cover: 16:9, min 1200x675, JPG/PNG/WebP under 5 MB
