@@ -91,8 +91,9 @@ export function FundLane() {
       }
       await native.enable(CHAIN_ID);
       const key = await native.getKey(CHAIN_ID);
-      if (String(key.address).toLowerCase() !== qorAddress.toLowerCase()) {
-        setStatus({ kind: "error", message: "Wallet account mismatch. Reconnect the same wallet you connected on the EVM lane." });
+      const nativeQor = String(key.bech32Address ?? "");
+      if (nativeQor.toLowerCase() !== qorAddress.toLowerCase()) {
+        setStatus({ kind: "error", message: `Native lane is ${nativeQor || "unknown"} but EVM lane is ${qorAddress}. Switch the native account in QoreX to match, or fund ${qorAddress} from your funded wallet first.` });
         return;
       }
 
