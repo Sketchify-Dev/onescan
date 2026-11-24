@@ -1,11 +1,43 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { WalletIcon } from "@phosphor-icons/react";
 import { useWallet } from "@/lib/wallet";
+import type { Address } from "viem";
+
+function ShortAddr({ value }: { value: Address | string }) {
+  const v = String(value);
+  return (
+    <span className="rounded-full border border-line px-4 py-2 font-mono text-sm tabular-nums">
+      {v.slice(0, 6)}.{v.slice(-4)}
+    </span>
+  );
+}
 
 export function ConnectButton({ compact = false }: { compact?: boolean }) {
-  const { address, accounts, nativeQor, connected, connecting, error, connect, disconnect, selectAccount } =
+  const { address, nativeQor, connected, connecting, error, connect, disconnect } =
     useWallet();
+  const [counterpart, setCounterpart] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function derive() {
+      if (!address) {
+        if (!cancelled) setCounterpart(null);
+        return;
+      }
+      try {
+        const { toQorAddress } = await import("@qorechain/evm");
+        if (!cancelled) setCounterpart(toQorAddress(address));
+      } catch {
+        if (!cancelled) setCounterpart(null);
+      }
+    }
+    derive();
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   if (!connected) {
     return (
@@ -39,9 +71,11 @@ export function ConnectButton({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <span className="hidden rounded-full border border-line px-4 py-2 font-mono text-sm tabular-nums sm:inline">
-          {address?.slice(0, 6)}.{address?.slice(-4)}
-        </span>
+        {address && (
+          <span className="hidden rounded-full border border-line px-4 py-2 font-mono text-sm tabular-nums sm:inline">
+            {address.slice(0, 6)}.{address.slice(-4)}
+          </span>
+        )}
         <button
           onClick={disconnect}
           className="inline-flex min-h-[44px] items-center rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-transform enabled:active:scale-95 dark:bg-paper dark:text-ink"
@@ -57,9 +91,7 @@ export function ConnectButton({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-3">
-        <span className="rounded-full border border-line px-4 py-2 font-mono text-sm tabular-nums">
-          {address?.slice(0, 6)}.{address?.slice(-4)}
-        </span>
+        {address && <ShortAddr value={address} />}
         <button
           onClick={disconnect}
           className="inline-flex min-h-[44px] items-center rounded-full border border-line px-5 text-sm font-medium transition-transform enabled:active:scale-95"
@@ -67,28 +99,17 @@ export function ConnectButton({ compact = false }: { compact?: boolean }) {
           Disconnect
         </button>
       </div>
-      {accounts.length > 1 && (
-        <div className="flex flex-col gap-2 rounded-2xl border border-line p-4">
-          <p className="text-[13px] leading-relaxed text-ink-muted">
-            QoreX exposed {accounts.length} EVM accounts. Pick the funded one.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {accounts.map((a) => (
-              <button
-                key={a}
-                type="button"
-                onClick={() => selectAccount(a)}
-                className={`inline-flex min-h-[44px] items-center rounded-full border px-4 font-mono text-xs tabular-nums transition-transform enabled:active:scale-95 ${a.toLowerCase() === address?.toLowerCase() ? "border-accent font-semibold" : "border-line"}`}
-              >
-                {a.slice(0, 6)}.{a.slice(-4)}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-      {nativeQor && (
+      {address && counterpart && (
         <p className="break-all font-mono text-xs text-ink-muted">
-          Native lane in this wallet: {nativeQor}
+          This EVM address is {counterpart} on the native lane.
+        </p>
+      )}
+      {nativeQor && counterpart && nativeQor.toLowerCase() !== counterpart.toLowerCase() && (
+        <p role="alert" className="text-[13px] leading-relaxed text-danger">
+          QoreX native lane is {nativeQor.slice(0, 12)}.{nativeQor.slice(-6)} but the
+          connected EVM maps to {counterpart.slice(0, 12)}.{counterpart.slice(-6)}.
+          Those are two different accounts. In QoreX switch the account so both
+          lanes agree, then tap Disconnect and Connect QoreX again.
         </p>
       )}
     </div>
