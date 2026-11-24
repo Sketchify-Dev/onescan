@@ -14,8 +14,7 @@ type WindowState =
   | { kind: "unavailable" };
 
 export function FundLane() {
-  const { address, nativeQor } = useWallet();
-  const [qorAddress, setQorAddress] = useState<string | null>(null);
+  const { address } = useWallet();
   const [evmBalance, setEvmBalance] = useState<bigint | null>(null);
   const [window, setWindow] = useState<WindowState>({ kind: "loading" });
   const [refreshTick, setRefreshTick] = useState(0);
@@ -25,7 +24,6 @@ export function FundLane() {
     async function load() {
       if (!address) {
         if (!cancelled) {
-          setQorAddress(null);
           setEvmBalance(null);
           setWindow({ kind: "loading" });
         }
@@ -34,7 +32,6 @@ export function FundLane() {
       try {
         const { toQorAddress, evmWindowStatus } = await import("@qorechain/evm");
         const qor = toQorAddress(address);
-        if (!cancelled) setQorAddress(qor);
         const bal = await publicClient().getBalance({ address });
         if (!cancelled) setEvmBalance(bal);
         try {
@@ -51,7 +48,6 @@ export function FundLane() {
         }
       } catch {
         if (!cancelled) {
-          setQorAddress(null);
           setEvmBalance(null);
           setWindow({ kind: "unavailable" });
         }
@@ -65,9 +61,6 @@ export function FundLane() {
 
   if (!address) return null;
 
-  const lanesAgree =
-    !!nativeQor && !!qorAddress && nativeQor.toLowerCase() === qorAddress.toLowerCase();
-
   return (
     <section className="flex flex-col gap-3 rounded-2xl border border-line p-6">
       <div className="flex items-center justify-between gap-3">
@@ -79,34 +72,16 @@ export function FundLane() {
           {evmBalance === null ? "loading." : `${formatEther(evmBalance)} QOR`}
         </span>
       </div>
-      {qorAddress && (
-        <p className="break-all font-mono text-xs text-ink-muted">
-          Minting wallet: {address} ({qorAddress})
-        </p>
-      )}
-      {nativeQor && !lanesAgree && (
-        <p className="break-all font-mono text-xs text-ink-muted">
-          Funded wallet on native lane: {nativeQor}
-        </p>
-      )}
       {window.kind === "live" && (
         <p role="status" className="text-sm text-success">
           Window live: {window.remainingTxs} txs left, {window.remainingBlocks} blocks left. Mint away.
         </p>
       )}
       {window.kind === "expired" && (
-        <div className="flex flex-col gap-2">
-          <p role="alert" className="text-sm leading-relaxed text-danger">
-            EVM window expired. The chain refuses every EVM tx until a new
-            window is open.
-          </p>
-          <p className="text-sm leading-relaxed text-ink-muted">
-            QoreX manages this message itself and refuses it from websites, so
-            open it inside the wallet: QoreX app, switch to the account above,
-            find the EVM spending window or EVM authorisation screen, open a
-            new window, then come back here and tap Refresh below.
-          </p>
-        </div>
+        <p role="alert" className="text-sm leading-relaxed text-danger">
+          EVM window expired. Open a new window inside the QoreX app for this
+          account, then tap Refresh below and mint.
+        </p>
       )}
       <button
         type="button"

@@ -6,15 +6,11 @@ import { diana } from "@/lib/chain";
 
 type WalletState = {
   address: Address | null;
-  accounts: Address[];
-  nativeQor: string | null;
   connected: boolean;
   connecting: boolean;
   error: string | null;
   connect: () => Promise<void>;
   disconnect: () => void;
-  selectAccount: (a: Address) => void;
-  refreshNative: () => Promise<void>;
   getWalletClient: () => ReturnType<typeof createWalletClient> | null;
 };
 
@@ -33,24 +29,9 @@ async function findProvider(): Promise<{ provider: never; rdns: string } | null>
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [address, setAddress] = useState<Address | null>(null);
-  const [accounts, setAccounts] = useState<Address[]>([]);
-  const [nativeQor, setNativeQor] = useState<string | null>(null);
   const [provider, setProvider] = useState<never | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const readNative = useCallback(async () => {
-    try {
-      const { getQorexNative } = await import("@qorechain/qorex-types");
-      const native = getQorexNative();
-      if (!native) return;
-      await native.enable("qorechain-diana");
-      const key = await native.getKey("qorechain-diana");
-      setNativeQor(String(key.bech32Address ?? ""));
-    } catch {
-      setNativeQor(null);
-    }
-  }, []);
 
   const connect = useCallback(async () => {
     setConnecting(true);
@@ -84,31 +65,19 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         }
       }
       setProvider(found.provider);
-      setAccounts(list);
       setAddress(list[0]);
-      void readNative();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Wallet connection failed.");
     } finally {
       setConnecting(false);
     }
-  }, [readNative]);
+  }, []);
 
   const disconnect = useCallback(() => {
     setAddress(null);
-    setAccounts([]);
-    setNativeQor(null);
     setProvider(null);
     setError(null);
   }, []);
-
-  const selectAccount = useCallback((a: Address) => {
-    setAddress(a);
-  }, []);
-
-  const refreshNative = useCallback(async () => {
-    await readNative();
-  }, [readNative]);
 
   const getWalletClient = useCallback(() => {
     if (!provider || !address) return null;
@@ -122,18 +91,14 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<WalletState>(
     () => ({
       address,
-      accounts,
-      nativeQor,
       connected: address !== null,
       connecting,
       error,
       connect,
       disconnect,
-      selectAccount,
-      refreshNative,
       getWalletClient,
     }),
-    [address, accounts, nativeQor, connecting, error, connect, disconnect, selectAccount, refreshNative, getWalletClient]
+    [address, connecting, error, connect, disconnect, getWalletClient]
   );
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
