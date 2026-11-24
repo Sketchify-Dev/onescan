@@ -12,6 +12,8 @@ Forwarded QR codes kill small events. OneScan mints soulbound tickets with hybri
 
 🔗 **Live:** https://onescan-qorechain.vercel.app
 
+🎬 **Demo video:** https://youtu.be/gDD7dbK-JQw (94s, live testnet mint plus scan plus rejected forge)
+
 Built for the [QoreChain Developer Fest](https://build.qorechain.io) (Build Before Q-Day, 4 Nov to 2 Dec 2026). Category: Quantum Pass, solo.
 
 ## How to Test
@@ -74,5 +76,5 @@ Reproduce: `DEPLOYER_KEY=0x... node scripts/proof-cycle.mjs`. Revert txs are sen
 
 - Fest project page: add the link here once created (https://build.qorechain.io)
 - Testnet addresses used: posted on project page, format `qor1...` plus `0x...`
-- Video: max 3 min, live testnet mint plus scan plus rejected forge
+- Video: https://youtu.be/gDD7dbK-JQw (94s, live testnet mint plus scan plus rejected forge)
 - Cover: 16:9, min 1200x675, JPG/PNG/WebP under 5 MB
