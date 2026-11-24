@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getAddress } from "viem";
 import { publicClient } from "@/lib/chain";
 import { PRECOMPILE_ADDRESSES, IQORE_PQC_ABI } from "@qorechain/evm";
 import type { Address } from "viem";
@@ -14,7 +15,7 @@ type PqState =
 async function fetchPqStatus(account: Address): Promise<PqState> {
   try {
     const res = (await publicClient().readContract({
-      address: PRECOMPILE_ADDRESSES.pqcKeyStatus,
+      address: getAddress(PRECOMPILE_ADDRESSES.pqcKeyStatus),
       abi: IQORE_PQC_ABI,
       functionName: "pqcKeyStatus",
       args: [account],
