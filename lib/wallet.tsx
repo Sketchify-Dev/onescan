@@ -22,8 +22,6 @@ async function findProvider(): Promise<{ provider: never; rdns: string } | null>
   );
   const qorex = (await discoverQorexEip1193().catch(() => undefined)) ?? findQorexEip1193();
   if (qorex) return { provider: qorex as never, rdns: "QoreX" };
-  const eth = (window as unknown as { ethereum?: never }).ethereum;
-  if (eth) return { provider: eth, rdns: "injected" };
   return null;
 }
 
