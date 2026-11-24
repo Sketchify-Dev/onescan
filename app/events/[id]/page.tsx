@@ -161,6 +161,7 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
   const [actionTx, setActionTx] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionPending, setActionPending] = useState(false);
+  const [walletBalance, setWalletBalance] = useState<bigint | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -196,6 +197,26 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
       cancelled = true;
     };
   }, [contract, event, id]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadBalance() {
+      if (!address) {
+        if (!cancelled) setWalletBalance(null);
+        return;
+      }
+      try {
+        const bal = await publicClient().getBalance({ address });
+        if (!cancelled) setWalletBalance(bal);
+      } catch {
+        if (!cancelled) setWalletBalance(null);
+      }
+    }
+    loadBalance();
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   async function withdraw() {
     setActionTx(null);
@@ -294,6 +315,23 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
         {event ? (
           <>
             <ConnectButton />
+            {address && (
+              <div className="flex flex-col gap-2 rounded-2xl border border-line p-4">
+                <div className="flex items-center justify-between gap-3 text-sm">
+                  <span className="text-ink-muted">EVM lane balance</span>
+                  <span className="font-mono tabular-nums">
+                    {walletBalance === null ? "loading." : `${formatEther(walletBalance)} QOR`}
+                  </span>
+                </div>
+                {walletBalance !== null && walletBalance < event.price + BigInt(1000000000000000) && (
+                  <p className="text-[13px] leading-relaxed text-ink-muted">
+                    Your QOR may sit on the Cosmos lane (qor1 address) while this page spends from the EVM lane (0x address).
+                    In QoreX, move a little QOR to your own 0x address, wait one block, then mint again.
+                    Free events still need gas, paid events need price plus gas.
+                  </p>
+                )}
+              </div>
+            )}
             <MintTicket eventId={BigInt(id)} priceWei={event.price} />
             {myTicket !== null && <TicketQr value={myTicket.toString()} />}
             <Link

@@ -54,10 +54,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       try {
         await wallet.switchChain({ id: diana.id });
       } catch {
-        setError(
-          "Switch your wallet to QoreChain Diana, EVM chain 9800, then reconnect."
-        );
-        return;
+        try {
+          await wallet.addChain({ chain: diana });
+          await wallet.switchChain({ id: diana.id });
+        } catch {
+          setError(
+            "Add QoreChain Diana manually: RPC https://evm-testnet.qore.host, chain 9800, symbol QOR, explorer https://explore.qore.network. Then reconnect."
+          );
+          return;
+        }
       }
       setProvider(found.provider);
       setAddress(accounts[0]);
