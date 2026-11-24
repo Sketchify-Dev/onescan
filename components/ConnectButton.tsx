@@ -105,11 +105,8 @@ export function ConnectButton({ compact = false }: { compact?: boolean }) {
         </p>
       )}
       {nativeQor && counterpart && nativeQor.toLowerCase() !== counterpart.toLowerCase() && (
-        <p role="alert" className="text-[13px] leading-relaxed text-danger">
-          QoreX native lane is {nativeQor.slice(0, 12)}.{nativeQor.slice(-6)} but the
-          connected EVM maps to {counterpart.slice(0, 12)}.{counterpart.slice(-6)}.
-          Those are two different accounts. In QoreX switch the account so both
-          lanes agree, then tap Disconnect and Connect QoreX again.
+        <p className="break-all font-mono text-xs text-ink-muted">
+          Funded wallet on native lane: {nativeQor}. The window opens from there.
         </p>
       )}
     </div>

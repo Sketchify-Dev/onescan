@@ -22,7 +22,7 @@ type WindowState =
 const CHAIN_ID = "qorechain-diana";
 
 export function FundLane() {
-  const { address } = useWallet();
+  const { address, nativeQor } = useWallet();
   const [qorAddress, setQorAddress] = useState<string | null>(null);
   const [evmBalance, setEvmBalance] = useState<bigint | null>(null);
   const [window, setWindow] = useState<WindowState>({ kind: "loading" });
@@ -91,14 +91,14 @@ export function FundLane() {
       }
       await native.enable(CHAIN_ID);
       const key = await native.getKey(CHAIN_ID);
-      const nativeQor = String(key.bech32Address ?? "");
-      if (nativeQor.toLowerCase() !== qorAddress.toLowerCase()) {
-        setStatus({ kind: "error", message: `Native lane is ${nativeQor || "unknown"} but EVM lane is ${qorAddress}. Switch the native account in QoreX to match, or fund ${qorAddress} from your funded wallet first.` });
+      const signerQor = String(key.bech32Address ?? "");
+      if (!signerQor) {
+        setStatus({ kind: "error", message: "QoreX returned no native account. Unlock it and try again." });
         return;
       }
 
       const msg = openEvmWindowMessage({
-        sender: qorAddress,
+        sender: signerQor,
         blocks: 600,
         maxTxs: 20,
         maxValue: "20000000000000",
@@ -129,6 +129,9 @@ export function FundLane() {
 
   if (!address) return null;
 
+  const lanesAgree =
+    !!nativeQor && !!qorAddress && nativeQor.toLowerCase() === qorAddress.toLowerCase();
+
   return (
     <section className="flex flex-col gap-3 rounded-2xl border border-line p-6">
       <div className="flex items-center justify-between gap-3">
@@ -142,7 +145,12 @@ export function FundLane() {
       </div>
       {qorAddress && (
         <p className="break-all font-mono text-xs text-ink-muted">
-          Same account both lanes: {qorAddress} = {address}
+          Minting wallet: {address} ({qorAddress})
+        </p>
+      )}
+      {nativeQor && !lanesAgree && (
+        <p className="break-all font-mono text-xs text-ink-muted">
+          Window signer: {nativeQor} (your funded wallet, signs the window open)
         </p>
       )}
       {window.kind === "live" && (
@@ -158,10 +166,8 @@ export function FundLane() {
         </p>
       )}
       <p className="text-sm leading-relaxed text-ink-muted">
-        One account, two lanes, one balance. If your phone shows 98 QOR and
-        this page shows 0, those are two different wallets. Compare the
-        addresses above with your phone. To spend, open a window from the
-        QoreX mobile app browser, then mint here.
+        The window opens from your funded wallet and covers this minting wallet.
+        Tap below, approve in QoreX, wait one block, then mint.
       </p>
       <button
         onClick={openWindow}
