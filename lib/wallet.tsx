@@ -54,15 +54,10 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       try {
         await wallet.switchChain({ id: diana.id });
       } catch {
-        try {
-          await wallet.addChain({ chain: diana });
-          await wallet.switchChain({ id: diana.id });
-        } catch {
-          setError(
-            "Add QoreChain Diana manually: RPC https://evm-testnet.qore.host, chain 9800, symbol QOR, explorer https://explore.qore.network. Then reconnect."
-          );
-          return;
-        }
+        setError(
+          "Select QoreChain Diana testnet in QoreX, then reconnect. QoreX does not let sites add chains."
+        );
+        return;
       }
       setProvider(found.provider);
       setAddress(list[0]);
