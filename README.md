@@ -29,12 +29,15 @@ You need QoreX on testnet Diana, plus test QOR from the faucet.
 
 Test accounts: use two QoreX wallets, one organizer and one attendee. Faucet: QoreChain testnet faucet for test QOR, fest faucet for fUSD, fETH, fBTC.
 
-## Demo script (60 seconds)
+## Demo video (94 seconds)
 
-0 to 10s: problem. Fake screenshot QR vs real check in. Say: forwarded QRs kill small events.
-10 to 35s: live flow. Create Campus Show, mint ticket with QoreX, show QR.
-35 to 50s: scan to enter, show Checked In onchain plus explorer link. Then forged check in with leaked classical key, show Rejected.
-50 to 60s: close. Say: doors that survive Q-Day. Show testnet address and repo.
+https://youtu.be/gDD7dbK-JQw
+
+0 to 9s: hook. Screenshots do not belong at the door, forwarded QRs kill small events.
+9 to 32s: create Campus Show plus mint soulbound ticket with QoreX, show QR.
+32 to 53s: scan to enter, show Checked In onchain plus explorer link. Then double scan, rejected.
+53 to 71s: forged check in with leaked classical key alone, chain reverts, PQ check failed.
+71 to 94s: proof onchain plus close. Doors that survive Q-Day. Show testnet address and repo.
 
 ## Architecture
 
@@ -74,7 +77,7 @@ Reproduce: `DEPLOYER_KEY=0x... node scripts/proof-cycle.mjs`. Revert txs are sen
 
 ## Project links
 
-- Fest project page: add the link here once created (https://build.qorechain.io)
-- Testnet addresses used: posted on project page, format `qor1...` plus `0x...`
+- Fest project page: https://build.qorechain.io/p/onescan
+- Testnet addresses used: `qor1lx8qtyg9c9606ue7q4z3um4spr3lu92vpux8vq` plus EVM `0xF98e059105c174FD733e05451e6Eb008e3Fe154c` (single deployer account, all proof txs sender-verified via cast)
 - Video: https://youtu.be/gDD7dbK-JQw (94s, live testnet mint plus scan plus rejected forge)
-- Cover: 16:9, min 1200x675, JPG/PNG/WebP under 5 MB
+- Cover: `public/cover-onescan-1920x1080.png` (1920x1080, 75 KB)
