@@ -175,8 +175,8 @@ export default function NewEventPage() {
             className="rounded-xl border border-line bg-transparent px-4 py-3 font-mono text-sm outline-none focus:border-accent"
           />
           <p className="text-[13px] leading-relaxed text-ink-muted">
-            Door staff wallets. Only these plus you can check tickets in. In
-            v1 they share this event signing key, per scanner keys come next.
+            Door staff wallets. Only these plus you can check tickets in.
+            They share this event signing key.
           </p>
         </div>
         {status.kind === "error" && (

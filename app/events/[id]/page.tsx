@@ -9,7 +9,7 @@ import { PQTICKET_ABI } from "@/lib/contract";
 import { ConnectButton } from "@/components/ConnectButton";
 import { MintTicket } from "@/components/MintTicket";
 import { TicketQr } from "@/components/TicketQr";
-import { ScanIcon } from "@phosphor-icons/react";
+import { CopyIcon, ScanIcon } from "@phosphor-icons/react";
 
 type EventInfo = {
   organizer: `0x${string}`;
@@ -152,10 +152,87 @@ function useMyTicket(
 
 function EventBody({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { address } = useWallet();
+  const { address, getWalletClient } = useWallet();
   const { address: contract } = deployments();
   const { event, loading } = useEvent(id, contract);
   const myTicket = useMyTicket(id, event, address, contract);
+  const [scanners, setScanners] = useState<`0x${string}`[] | null>(null);
+  const [balance, setBalance] = useState<bigint | null>(null);
+  const [actionTx, setActionTx] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionPending, setActionPending] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      if (!contract || !event) {
+        if (!cancelled) {
+          setScanners(null);
+          setBalance(null);
+        }
+        return;
+      }
+      try {
+        const list = (await publicClient().readContract({
+          address: contract,
+          abi: PQTICKET_ABI,
+          functionName: "scannersOf",
+          args: [BigInt(id)],
+        } as never)) as unknown as `0x${string}`[];
+        const bal = await publicClient().getBalance({ address: contract });
+        if (!cancelled) {
+          setScanners(list);
+          setBalance(bal);
+        }
+      } catch {
+        if (!cancelled) {
+          setScanners(null);
+          setBalance(null);
+        }
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [contract, event, id]);
+
+  async function withdraw() {
+    setActionTx(null);
+    setActionError(null);
+    if (!contract) {
+      setActionError("Contract not deployed yet.");
+      return;
+    }
+    const wallet = getWalletClient();
+    if (!wallet || !address) {
+      setActionError("Connect the organizer wallet first.");
+      return;
+    }
+    setActionPending(true);
+    try {
+      const hash = await wallet.writeContract({
+        address: contract,
+        abi: PQTICKET_ABI,
+        functionName: "withdraw",
+        args: [BigInt(id)],
+        account: address,
+        chain: wallet.chain,
+      } as never);
+      setActionTx(hash as string);
+      const bal = await publicClient().getBalance({ address: contract });
+      setBalance(bal);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Withdraw failed.";
+      if (msg.includes("NotOrganizer")) {
+        setActionError("Only the organizer can withdraw.");
+      } else {
+        setActionError(msg.slice(0, 200));
+      }
+    } finally {
+      setActionPending(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -242,6 +319,79 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
           </>
         )}
       </section>
+      {event && (
+        <section className="flex flex-col gap-4 rounded-2xl border border-line p-6">
+          <h2 className="font-semibold">Door staff</h2>
+          {scanners === null ? (
+            <p className="text-sm text-ink-muted">Loading scanner list.</p>
+          ) : scanners.length === 0 ? (
+            <p className="text-sm leading-relaxed text-ink-muted">
+              Only the organizer can check tickets in. Add scanners at creation.
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              <li className="flex items-center justify-between gap-3 font-mono text-sm">
+                <span className="min-w-0 flex-1 break-all tabular-nums">{event.organizer}</span>
+                <span className="shrink-0 rounded-full border border-line px-3 py-1 text-xs font-medium">
+                  Organizer
+                </span>
+              </li>
+              {scanners.map((s) => (
+                <li key={s} className="flex items-center justify-between gap-3 font-mono text-sm">
+                  <span className="min-w-0 flex-1 break-all tabular-nums">{s}</span>
+                  <span className="shrink-0 rounded-full border border-line px-3 py-1 text-xs font-medium">
+                    Scanner
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+      {event && (
+        <section className="flex flex-col gap-3 rounded-2xl border border-line p-6">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-semibold">Event balance</h2>
+            <span className="font-mono text-sm tabular-nums">
+              {balance === null ? "loading." : `${formatEther(balance)} QOR`}
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed text-ink-muted">
+            Paid mints collect here. Only the organizer wallet can withdraw.
+          </p>
+          <button
+            onClick={withdraw}
+            disabled={actionPending}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line px-6 font-medium transition-transform enabled:active:scale-95 disabled:opacity-50"
+          >
+            {actionPending ? "Withdrawing." : "Withdraw to organizer"}
+          </button>
+          {actionError && (
+            <p role="alert" className="text-sm text-danger">
+              {actionError}
+            </p>
+          )}
+          {actionTx && (
+            <p role="status" className="flex flex-wrap items-center gap-2 text-sm text-success">
+              <span>Withdrawn.</span>
+              <a
+                href={`${EXPLORER}/tx/${actionTx}`}
+                className="underline underline-offset-4"
+              >
+                View on explorer
+              </a>
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(`${EXPLORER}/tx/${actionTx}`)}
+                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-line transition-transform enabled:active:scale-95"
+                aria-label="Copy explorer link"
+              >
+                <CopyIcon size={18} weight="regular" aria-hidden="true" />
+              </button>
+            </p>
+          )}
+        </section>
+      )}
     </main>
   );
 }

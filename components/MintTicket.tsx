@@ -8,6 +8,7 @@ import { deployments, EXPLORER, publicClient } from "@/lib/chain";
 import { PQTICKET_ABI } from "@/lib/contract";
 import { TicketQr } from "@/components/TicketQr";
 import { ShieldCheckIcon } from "@phosphor-icons/react";
+import { CopyIcon } from "@phosphor-icons/react";
 import { TicketIcon } from "@phosphor-icons/react";
 
 export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: bigint }) {
@@ -78,8 +79,6 @@ export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: b
         setError("Wrong payment amount for this event.");
       } else if (msg.includes("SoldOut")) {
         setError("This event is sold out.");
-      } else if (msg.includes("no-pqc-key") || msg.includes("no-window")) {
-        setError("EVM window closed. Open the PQ authorization window first.");
       } else {
         setError(msg.slice(0, 200));
       }
@@ -94,6 +93,11 @@ export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: b
 
   return (
     <div className="flex flex-col gap-3">
+      {pq.kind === "checking" && (
+        <p role="status" className="text-sm text-ink-muted">
+          Checking PQ key status onchain.
+        </p>
+      )}
       {pq.kind === "registered" && (
         <p role="status" className="inline-flex items-center gap-2 text-sm text-success">
           <ShieldCheckIcon size={18} weight="regular" aria-hidden="true" />
@@ -122,14 +126,22 @@ export function MintTicket({ eventId, priceWei }: { eventId: bigint; priceWei: b
         </p>
       )}
       {txHash && (
-        <p role="status" className="text-sm text-success">
-          Minted.{" "}
+        <p role="status" className="flex flex-wrap items-center gap-2 text-sm text-success">
+          <span>Minted.</span>
           <a
             href={`${EXPLORER}/tx/${txHash}`}
             className="underline underline-offset-4"
           >
             View on explorer
           </a>
+          <button
+            type="button"
+            onClick={() => navigator.clipboard.writeText(`${EXPLORER}/tx/${txHash}`)}
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-line transition-transform enabled:active:scale-95"
+            aria-label="Copy explorer link"
+          >
+            <CopyIcon size={18} weight="regular" aria-hidden="true" />
+          </button>
         </p>
       )}
       {ticketId !== null && (

@@ -28,7 +28,7 @@ export default function ScanPage() {
         <CheckInForm />
       </div>
       <section className="flex flex-col gap-2 rounded-2xl border border-line p-6">
-        <h2 className="font-semibold">What the judge will see</h2>
+        <h2 className="font-semibold">How to demo the door</h2>
         <ol className="flex list-decimal flex-col gap-2 pl-6 text-sm leading-relaxed text-ink-muted">
           <li>First scan of a fresh ticket: accepted, event recorded onchain.</li>
           <li>Second scan of the same ticket: rejected, already used.</li>
