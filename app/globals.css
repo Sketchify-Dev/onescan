@@ -34,7 +34,7 @@
   --color-accent-ink: var(--accent-ink);
   --color-success: var(--success);
   --color-danger: var(--danger);
-  --font-sans: "General Sans", var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: "General Sans", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-display: "Cabinet Grotesk", "General Sans", system-ui, sans-serif;
   --font-editorial: "Instrument Serif", Georgia, serif;
