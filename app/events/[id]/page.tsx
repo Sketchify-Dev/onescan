@@ -10,6 +10,7 @@ import { ConnectButton } from "@/components/ConnectButton";
 import { MintTicket } from "@/components/MintTicket";
 import { TicketQr } from "@/components/TicketQr";
 import { CopyIcon, ScanIcon } from "@phosphor-icons/react";
+import { FundLane } from "@/components/FundLane";
 
 type EventInfo = {
   organizer: `0x${string}`;
@@ -333,6 +334,7 @@ function EventBody({ params }: { params: Promise<{ id: string }> }) {
               </div>
             )}
             <MintTicket eventId={BigInt(id)} priceWei={event.price} />
+            <FundLane />
             {myTicket !== null && <TicketQr value={myTicket.toString()} />}
             <Link
               href="/scan"
